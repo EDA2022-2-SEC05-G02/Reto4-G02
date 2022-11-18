@@ -29,7 +29,17 @@ import config as cf
 from DISClib.ADT import list as lt
 from DISClib.ADT import map as mp
 from DISClib.DataStructures import mapentry as me
-from DISClib.Algorithms.Sorting import shellsort as sa
+from DISClib.Algorithms.Sorting import shellsort as ss
+from tabulate import tabulate
+import datetime 
+import time
+from DISClib.ADT import list as lt
+from DISClib.ADT import map as mp
+from DISClib.ADT import orderedmap as om
+from DISClib.ADT import minpq as pq
+from DISClib.ADT import stack as st
+from DISClib.ADT import graph as gr
+from DISClib.ADT import indexminpq as ipq
 assert cf
 
 """
@@ -39,11 +49,39 @@ los mismos.
 
 # Construccion de modelos
 
+def newAnalyzer():
+    """
+    Se crea el analizador de los datos del reto
+    
+    """    
+    
+    analyzer = {}
+
+    return analyzer
+
 # Funciones para agregar informacion al catalogo
 
 # Funciones para creacion de datos
 
 # Funciones de consulta
+
+#! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 1]  =^..^=    =^..^=    =^..^=    =^..^=
+
+#! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 2]  =^..^=    =^..^=    =^..^=    =^..^=
+
+#! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 3]  =^..^=    =^..^=    =^..^=    =^..^=
+
+#! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 4]  =^..^=    =^..^=    =^..^=    =^..^=
+
+#! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 5]  =^..^=    =^..^=    =^..^=    =^..^=
+
+#! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 6]  =^..^=    =^..^=    =^..^=    =^..^=
+
+#! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 7]  =^..^=    =^..^=    =^..^=    =^..^=
+
+#! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 8]  =^..^=    =^..^=    =^..^=    =^..^=
+
+
 
 # Funciones utilizadas para comparar elementos dentro de una lista
 
