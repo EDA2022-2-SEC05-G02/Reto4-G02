@@ -184,3 +184,7 @@ if __name__ == "__main__":
     sys.setrecursionlimit(2 ** 20)
     thread = threading.Thread(target=thread_cycle)
     thread.start()
+
+
+
+#Primera entrega – Reto 4
