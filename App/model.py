@@ -55,10 +55,27 @@ los mismos.
 def newAnalyzer():
     """
     Se crea el analizador de los datos del reto
-    
+    connections --> Es un grafo para representar las rutas entre estaciones 
+    edges --> Es una arrayList en la que van todos los edges
+    vertices --> Es una arrayList en la que van todos los vertices
+    latitudes --> Es un hashmap con todas las latitudes por nombre de barrio    
     """    
     
-    analyzer = {}
+    analyzer = {"connections":None,
+                "edges":None,
+                "vertices":None,
+                "latitudes":None
+                }
+
+    analyzer['connections'] = gr.newGraph(datastructure='ADJ_LIST',
+                                              directed=True,
+                                              size=14000,
+                                              comparefunction=compareStopIds)
+    analyzer["edges"] = lt.newList("ARRAY_LIST",cmpfunction=compareStopIds)
+    analyzer["vertices"] = lt.newList("ARRAY_LIST",cmpfunction=compareStopIds)
+    analyzer['latitudes'] = mp.newMap(numelements=14000,
+                                     maptype='PROBING',
+                                     comparefunction=compareStopIds)
 
     return analyzer
 
@@ -89,3 +106,14 @@ def newAnalyzer():
 # Funciones utilizadas para comparar elementos dentro de una lista
 
 # Funciones de ordenamiento
+def compareStopIds(stop, keyvaluestop):
+    """
+    Compara dos estaciones
+    """
+    stopcode = keyvaluestop['key']
+    if (stop == stopcode):
+        return 0
+    elif (stop > stopcode):
+        return 1
+    else:
+        return -1
