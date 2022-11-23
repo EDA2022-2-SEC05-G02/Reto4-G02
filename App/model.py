@@ -59,11 +59,24 @@ def newAnalyzer():
     """    
     
     analyzer = {"DiGraph": None,
-                "Graph": None}
+                "Graph": None,
+                "Id->Coordenadas HASH": None,
+                "Id->District_Name HASH":None,
+                "Id->Neighborhood_Name HASH":None,
+                "Arcos LIST": None,
+                "Vertices LIST": None}
     
+    #Tiene el cálculo exacto para el tamaño sumando el total de busstops + transbordos
     analyzer["DiGraph"] = gr.newGraph(datastructure="ADJ_LIST", directed=True, size=5011, comparefunction=compareStopIds)
+    analyzer["Graph"] = gr.newGraph(datastructure="ADJ_LIST", directed=False, size=5011, comparefunction=compareStopIds)
 
+    #Tiene el número de elementos preciso, es decir, el número primo más cercano al producto del total de bustops x 4
+    analyzer["Id->Coordenadas HASH"] = mp.newMap(numelements=18593, maptype='PROBING', loadfactor=0.5, comparefunction=compareMapID)
+    analyzer["Id->District_Name HASH"] = mp.newMap(numelements=18593, maptype='PROBING', loadfactor=0.5, comparefunction=compareMapID)
+    analyzer["Id->Neighborhood_Name HASH"] = mp.newMap(numelements=18593, maptype='PROBING', loadfactor=0.5, comparefunction=compareMapID)
 
+    #analyzer["Arcos LIST"] = lt.newList(datastructure='ARRAY_LIST', cmpfunction= ?????????? va a ser una lista literal solo de los pesos de los vértices? o que?)
+    #analyzer["Vertices LIST"] = lt.newList(datastructure='ARRAY_LIST', cmpfunction= ?????? va a ser lit de solo los identificadores? pa que? toca preguntar)
 
     return analyzer
 
@@ -94,13 +107,19 @@ def newAnalyzer():
 # Funciones utilizadas para comparar elementos 
 
 def compareStopIds(stop, keyvaluestop):
-    """
-    Compara dos estaciones
-    """
     stopcode = keyvaluestop['key']
     if (stop == stopcode):
         return 0
     elif (stop > stopcode):
+        return 1
+    else:
+        return -1
+    
+def compareMapID(id, entry):
+    idEntry = me.getKey(entry)
+    if (id == idEntry):
+        return 0
+    elif (id > idEntry):
         return 1
     else:
         return -1
