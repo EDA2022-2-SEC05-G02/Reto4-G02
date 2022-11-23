@@ -98,21 +98,13 @@ def addCoordenadasToHASH(stop, analyzer):
 
 def addVertexToGraph(stop, graph, analyzer):
     id = stop["id"]
+    transbordo = "T-"+stop["id"][0:4]
     graph = analyzer[graph]
+    if stop["Transbordo"]=="S":
+        if not(gr.containsVertex(graph, transbordo)):
+            gr.insertVertex(graph=graph, vertex=transbordo)
 
     gr.insertVertex(graph=graph, vertex=id)
-
-def addEdgesToDigraph(edge, graph, analyzer):
-    graph = analyzer[graph]
-    bus = edge["Bus_Stop"][4:7]
-    vertexA = edge["Code"] + "-" + bus
-    vertexB = edge["Code_Destiny"] + "-" + bus
-    coorA = getValueFast(analyzer["id->Coordenadas HASH"], vertexA)
-    coorB = getValueFast(analyzer["id->Coordenadas HASH"], vertexB)
-    weight = haversine(coorA, coorB)
-
-    gr.addEdge(graph, vertexA, vertexB, weight)
-    gr.addEdge(graph, vertexB, vertexA, weight)
 
 def addEdgesToGraph(edge, graph, analyzer):
     graph = analyzer[graph]
@@ -124,6 +116,8 @@ def addEdgesToGraph(edge, graph, analyzer):
     weight = haversine(coorA, coorB)
 
     gr.addEdge(graph, vertexA, vertexB, weight)
+    if graph =="diGraph":
+        gr.addEdge(graph, vertexB, vertexA, weight)
     
 
 # Funciones para creacion de datos

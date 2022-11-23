@@ -61,12 +61,14 @@ def loadData(control, suffix):
         model.addCoordenadasToHASH(stop, analyzer)
         model.addVertexToGraph(stop, "diGraph", analyzer)
         model.addVertexToGraph(stop, "graph", analyzer)
+        # FUNCION PONER EDGES DE STOP A TRANSBORDO
+        # model.addEdgeToTransbordo(stop,)
+
 
     for edge in inputFileEdgesData:
         reformEdge(edge)
-        model.addEdgesToDigraph(edge, "diGraph", analyzer)
+        model.addEdgesToGraph(edge, "diGraph", analyzer)
         model.addEdgesToGraph(edge, "graph", analyzer)
-
     return control
 
 # Funciones de ordenamiento
