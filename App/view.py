@@ -30,7 +30,7 @@ from DISClib.ADT import list as lt
 import folium
 import webbrowser
 assert cf
-
+import model
 """
 La vista se encarga de la interacción con el usuario
 Presenta el menu de opciones y por cada seleccion
@@ -152,7 +152,7 @@ def thread_cycle():
             controller.loadData(control, suffix)
 
         elif int(inputs[0]) == 1:
-            pass
+            model.printVerteces("diGraph", control["model"])
 
         elif int(inputs[0]) == 2:
             pass

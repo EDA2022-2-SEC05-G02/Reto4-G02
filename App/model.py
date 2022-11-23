@@ -45,6 +45,12 @@ from folium.plugins import MarkerCluster
 import math
 assert cf
 
+
+#para intalar harvesine ejecutar en consola:               pip install haversine
+from haversine import haversine, Unit
+
+
+
 """
 Se define la estructura de un catálogo de videos. El catálogo tendrá dos listas, una para los videos, otra para las categorias de
 los mismos.
@@ -60,20 +66,20 @@ def newAnalyzer():
     
     analyzer = {"DiGraph": None,
                 "Graph": None,
-                "Id->Coordenadas HASH": None,
-                "Id->District_Name HASH":None,
-                "Id->Neighborhood_Name HASH":None,
+                "id->Coordenadas HASH": None,
+                "id->District_Name HASH":None,
+                "id->Neighborhood_Name HASH":None,
                 "Arcos LIST": None,
                 "Vertices LIST": None}
     
     #Tiene el cálculo exacto para el tamaño sumando el total de busstops + transbordos
-    analyzer["DiGraph"] = gr.newGraph(datastructure="ADJ_LIST", directed=True, size=5011, comparefunction=compareStopIds)
-    analyzer["Graph"] = gr.newGraph(datastructure="ADJ_LIST", directed=False, size=5011, comparefunction=compareStopIds)
+    analyzer["diGraph"] = gr.newGraph(datastructure="ADJ_LIST", directed=True, size=5011, comparefunction=compareStopIds)
+    analyzer["graph"] = gr.newGraph(datastructure="ADJ_LIST", directed=False, size=5011, comparefunction=compareStopIds)
 
     #Tiene el número de elementos preciso, es decir, el número primo más cercano al producto del total de bustops x 4
-    analyzer["Id->Coordenadas HASH"] = mp.newMap(numelements=18593, maptype='PROBING', loadfactor=0.5, comparefunction=compareMapID)
-    analyzer["Id->District_Name HASH"] = mp.newMap(numelements=18593, maptype='PROBING', loadfactor=0.5, comparefunction=compareMapID)
-    analyzer["Id->Neighborhood_Name HASH"] = mp.newMap(numelements=18593, maptype='PROBING', loadfactor=0.5, comparefunction=compareMapID)
+    analyzer["id->Coordenadas HASH"] = mp.newMap(numelements=18593, maptype='PROBING', loadfactor=0.5, comparefunction=compareMapID)
+    analyzer["id->District_Name HASH"] = mp.newMap(numelements=18593, maptype='PROBING', loadfactor=0.5, comparefunction=compareMapID)
+    analyzer["id->Neighborhood_Name HASH"] = mp.newMap(numelements=18593, maptype='PROBING', loadfactor=0.5, comparefunction=compareMapID)
 
     #analyzer["Arcos LIST"] = lt.newList(datastructure='ARRAY_LIST', cmpfunction= ?????????? va a ser una lista literal solo de los pesos de los vértices? o que?)
     #analyzer["Vertices LIST"] = lt.newList(datastructure='ARRAY_LIST', cmpfunction= ?????? va a ser lit de solo los identificadores? pa que? toca preguntar)
@@ -81,6 +87,44 @@ def newAnalyzer():
     return analyzer
 
 # Funciones para agregar informacion al catalogo
+
+def addCoordenadasToHASH(stop, analyzer):
+    map = analyzer["id->Coordenadas HASH"]
+    longitude = stop["Longitude"]
+    latitude = stop["Latitude"]
+    id = stop["id"]
+
+    mp.put(map, id, (latitude, longitude))
+
+def addVertexToGraph(stop, graph, analyzer):
+    id = stop["id"]
+    graph = analyzer[graph]
+
+    gr.insertVertex(graph=graph, vertex=id)
+
+def addEdgesToDigraph(edge, graph, analyzer):
+    graph = analyzer[graph]
+    bus = edge["Bus_Stop"][4:7]
+    vertexA = edge["Code"] + "-" + bus
+    vertexB = edge["Code_Destiny"] + "-" + bus
+    coorA = getValueFast(analyzer["id->Coordenadas HASH"], vertexA)
+    coorB = getValueFast(analyzer["id->Coordenadas HASH"], vertexB)
+    weight = haversine(coorA, coorB)
+
+    gr.addEdge(graph, vertexA, vertexB, weight)
+    gr.addEdge(graph, vertexB, vertexA, weight)
+
+def addEdgesToGraph(edge, graph, analyzer):
+    graph = analyzer[graph]
+    bus = edge["Bus_Stop"][4:7]
+    vertexA = edge["Code"] + "-" + bus
+    vertexB = edge["Code_Destiny"] + "-" + bus
+    coorA = getValueFast(analyzer["id->Coordenadas HASH"], vertexA)
+    coorB = getValueFast(analyzer["id->Coordenadas HASH"], vertexB)
+    weight = haversine(coorA, coorB)
+
+    gr.addEdge(graph, vertexA, vertexB, weight)
+    
 
 # Funciones para creacion de datos
 
@@ -125,3 +169,20 @@ def compareMapID(id, entry):
         return -1
 
 # Funciones de ordenamiento
+    
+
+#Funciones útiles
+    
+def getValueFast(map, key):
+
+    entry = mp.get(map, key)
+
+    value = me.getValue(entry)
+
+    return value
+    
+def printVerteces(graph, analyzer):
+    graph = analyzer[graph]
+    list = gr.vertices(graph)
+    for vertex in lt.iterator(list):
+        print(vertex)

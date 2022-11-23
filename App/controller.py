@@ -27,6 +27,7 @@ import datetime
 import time
 from DISClib.ADT import list as lt
 
+
 """
 El controlador se encarga de mediar entre la vista y el modelo.
 """
@@ -56,22 +57,51 @@ def loadData(control, suffix):
     inputFileEdgesData = csv.DictReader(open(EdgesDataFile, encoding= "utf-8"))
    
     for stop in inputFileStops:
-        stop = reformStop(stop)
+        reformStop(stop)
+        model.addCoordenadasToHASH(stop, analyzer)
+        model.addVertexToGraph(stop, "diGraph", analyzer)
+        model.addVertexToGraph(stop, "graph", analyzer)
 
-   
     for edge in inputFileEdgesData:
-        edge = reformEdge(edge)
-        
+        reformEdge(edge)
+        model.addEdgesToDigraph(edge, "diGraph", analyzer)
+        model.addEdgesToGraph(edge, "graph", analyzer)
 
     return control
 
 # Funciones de ordenamiento
 
 def reformStop(stop):
-    pass
+    addId(stop)
+    stop["Longitude"] = float(stop["Longitude"])
+    stop["Latitude"] = float(stop["Latitude"])
 
 def reformEdge(edge):
-    pass
+    convertCodes(edge)
+
+def addId(stop):
+    code = stop["Code"]
+    bus = stop["Bus_Stop"][6:9]
+
+    lenCode = len(code)
+    missingCeros = "0"*(4-lenCode)
+
+    newCode = missingCeros+code
+
+    id = newCode + "-" + bus
+
+    stop["id"] = id
+
+def convertCodes(edge):
+    columns = ["Code", "Code_Destiny"]
+
+    for x in columns:
+        code = edge[x]
+        lenCode = len(code)
+        missingCeros = "0"*(4-lenCode)
+        newCode = missingCeros+code
+        
+        edge[x] = newCode
 
 # Funciones de consulta sobre el catálogo
 
