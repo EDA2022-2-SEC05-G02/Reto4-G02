@@ -63,7 +63,7 @@ def loadData(control, suffix):
         model.addVertexToGraph(stop, "graph", analyzer)
         # FUNCION PONER EDGES DE STOP A TRANSBORDO
         if stop["Transbordo"]=="S":
-            model.addEdgeToTransbordo(stop,"graph", analyzer)
+                model.addEdgeToTransbordo(stop,"graph", analyzer)
 
 
     for edge in inputFileEdgesData:

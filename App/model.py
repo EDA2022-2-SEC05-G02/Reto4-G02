@@ -107,10 +107,11 @@ def addVertexToGraph(stop, graph, analyzer):
     gr.insertVertex(graph=graph, vertex=id)
 
 def addEdgeToTransbordo (stop, graph, analyzer):
-    id = stop["id"]
-    transbordoCode = "T-"+id[0:4]
-    gr.addEdge(graph, id, transbordoCode, 0)
-    gr.addEdge(graph, transbordoCode, id, 0)
+    graph = analyzer[graph]
+    id = str(stop["id"])
+    transbordoCode = "T-"+str(id[0:4])
+    gr.addEdge(graph, id, transbordoCode, 0.0)
+    gr.addEdge(graph, transbordoCode, id, 0.0)
 
 def addEdgesToGraph(edge, graph, analyzer):
     graph = analyzer[graph]
@@ -120,6 +121,7 @@ def addEdgesToGraph(edge, graph, analyzer):
     coorA = getValueFast(analyzer["id->Coordenadas HASH"], vertexA)
     coorB = getValueFast(analyzer["id->Coordenadas HASH"], vertexB)
     weight = haversine(coorA, coorB)
+    print((weight))
 
     gr.addEdge(graph, vertexA, vertexB, weight)
     if graph =="diGraph":
