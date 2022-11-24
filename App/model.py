@@ -117,7 +117,7 @@ def addVertexToGraph(stop, graph, analyzer):
     else:
         idEstacion = stop["id"][0:4]
         if not(lt.isPresent(analyzer["listPerNOTTransbordo"],idEstacion)):
-            lt.addLast(analyzer["listPerNOTTransbordo"],transbordo)
+            lt.addLast(analyzer["listPerNOTTransbordo"],idEstacion)
 
 
     gr.insertVertex(graph=graph, vertex=id)
