@@ -55,29 +55,40 @@ def loadData(control, suffix):
     EdgesDataFile = cf.data_dir + "bus_edges_bcn-utf8" + suffix
     inputFileStops = csv.DictReader(open(StopsFile, encoding = 'utf-8'))
     inputFileEdgesData = csv.DictReader(open(EdgesDataFile, encoding= "utf-8"))
-   
+
+
+
     for stop in inputFileStops:
-        reformStop(stop)
+        reformStop(stop, analyzer)
+    
         model.addCoordenadasToHASH(stop, analyzer)
         model.addVertexToGraph(stop, "diGraph", analyzer)
         model.addVertexToGraph(stop, "graph", analyzer)
         # FUNCION PONER EDGES DE STOP A TRANSBORDO
         if stop["Transbordo"]=="S":
                 model.addEdgeToTransbordo(stop,"graph", analyzer)
-
+                model.addEdgeToTransbordo(stop,"diGraph", analyzer)
 
     for edge in inputFileEdgesData:
         reformEdge(edge)
         model.addEdgesToGraph(edge, "diGraph", analyzer)
         model.addEdgesToGraph(edge, "graph", analyzer)
+
+    totalRutas = model.countRutas(analyzer)
+
     return control
 
 # Funciones de ordenamiento
 
-def reformStop(stop):
+def reformStop(stop, analyzer):
     addId(stop)
     stop["Longitude"] = float(stop["Longitude"])
     stop["Latitude"] = float(stop["Latitude"])
+
+    ruta = stop["Bus_Stop"][6:]
+    lt.addLast(analyzer["rutas LIST"], ruta)
+
+
 
 def reformEdge(edge):
     convertCodes(edge)

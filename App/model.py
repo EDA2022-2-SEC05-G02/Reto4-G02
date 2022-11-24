@@ -44,6 +44,7 @@ import folium
 from folium.plugins import MarkerCluster
 import math
 assert cf
+from DISClib.Algorithms.Sorting import mergesort as ms
 
 
 #para intalar harvesine ejecutar en consola:               pip install haversine
@@ -70,7 +71,9 @@ def newAnalyzer():
                 "id->District_Name HASH":None,
                 "id->Neighborhood_Name HASH":None,
                 "Arcos LIST": None,
-                "Vertices LIST": None}
+                "Vertices LIST": None,
+                "Totales HASH": None,
+                "rutas LIST": None}
     
     #Tiene el cálculo exacto para el tamaño sumando el total de busstops + transbordos
     analyzer["diGraph"] = gr.newGraph(datastructure="ADJ_LIST", directed=True, size=5011, comparefunction=compareStopIds)
@@ -80,6 +83,8 @@ def newAnalyzer():
     analyzer["id->Coordenadas HASH"] = mp.newMap(numelements=18593, maptype='PROBING', loadfactor=0.5, comparefunction=compareMapID)
     analyzer["id->District_Name HASH"] = mp.newMap(numelements=18593, maptype='PROBING', loadfactor=0.5, comparefunction=compareMapID)
     analyzer["id->Neighborhood_Name HASH"] = mp.newMap(numelements=18593, maptype='PROBING', loadfactor=0.5, comparefunction=compareMapID)
+
+    analyzer["rutas LIST"] = lt.newList(cmpfunction=compareList)
 
     #analyzer["Arcos LIST"] = lt.newList(datastructure='ARRAY_LIST', cmpfunction= ?????????? va a ser una lista literal solo de los pesos de los vértices? o que?)
     #analyzer["Vertices LIST"] = lt.newList(datastructure='ARRAY_LIST', cmpfunction= ?????? va a ser lit de solo los identificadores? pa que? toca preguntar)
@@ -106,12 +111,14 @@ def addVertexToGraph(stop, graph, analyzer):
 
     gr.insertVertex(graph=graph, vertex=id)
 
+
 def addEdgeToTransbordo (stop, graph, analyzer):
     graph = analyzer[graph]
     id = str(stop["id"])
     transbordoCode = "T-"+str(id[0:4])
     gr.addEdge(graph, id, transbordoCode, 0.0)
-    gr.addEdge(graph, transbordoCode, id, 0.0)
+    if graph =="diGraph":
+        gr.addEdge(graph, transbordoCode, id, 0.0)
 
 def addEdgesToGraph(edge, graph, analyzer):
     graph = analyzer[graph]
@@ -121,7 +128,7 @@ def addEdgesToGraph(edge, graph, analyzer):
     coorA = getValueFast(analyzer["id->Coordenadas HASH"], vertexA)
     coorB = getValueFast(analyzer["id->Coordenadas HASH"], vertexB)
     weight = haversine(coorA, coorB)
-    print((weight))
+    
 
     gr.addEdge(graph, vertexA, vertexB, weight)
     if graph =="diGraph":
@@ -169,6 +176,22 @@ def compareMapID(id, entry):
         return 1
     else:
         return -1
+    
+def compareList(ruta1, ruta2):
+    if (ruta1 == ruta2):
+        return 0
+    elif (ruta1 > ruta2):
+        return 1
+    else:
+        return -1
+    
+def cmpRutas(ruta1, ruta2):
+    if (ruta1 == ruta2):
+        return True
+    elif (ruta1 > ruta2):
+        return False
+    else:
+        return True
 
 # Funciones de ordenamiento
     
@@ -188,3 +211,16 @@ def printVerteces(graph, analyzer):
     list = gr.vertices(graph)
     for vertex in lt.iterator(list):
         print(vertex)
+
+def countRutas(analyzer):
+    
+
+    rutasList = ms.sort(analyzer["rutas LIST"], cmpRutas)
+    uniques = 1
+    last = lt.firstElement(rutasList)
+    for ruta in lt.iterator(rutasList):
+        if last != ruta:
+            uniques += 1
+            last = ruta
+
+    return uniques
