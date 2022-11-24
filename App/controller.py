@@ -26,6 +26,8 @@ import csv
 import datetime
 import time
 from DISClib.ADT import list as lt
+from DISClib.ADT import graph as gr
+
 
 
 """
@@ -62,16 +64,16 @@ def loadData(control, suffix):
         reformStop(stop, analyzer)
     
         model.addCoordenadasToHASH(stop, analyzer)
-        model.addVertexToGraph(stop, "diGraph", analyzer)
+        model.addVertexToGraph(stop, "DiGraph", analyzer)
         model.addVertexToGraph(stop, "graph", analyzer)
         # FUNCION PONER EDGES DE STOP A TRANSBORDO
         if stop["Transbordo"]=="S":
                 model.addEdgeToTransbordo(stop,"graph", analyzer)
-                model.addEdgeToTransbordo(stop,"diGraph", analyzer)
+                model.addEdgeToTransbordo(stop,"DiGraph", analyzer)
 
     for edge in inputFileEdgesData:
         reformEdge(edge)
-        model.addEdgesToGraph(edge, "diGraph", analyzer)
+        model.addEdgesToGraph(edge, "DiGraph", analyzer)
         model.addEdgesToGraph(edge, "graph", analyzer)
 
             #ESTO ERA PARA CONFIRMAR SI HABÍAN REPETIDOS O NO JAJA
@@ -119,6 +121,19 @@ def convertCodes(edge):
         newCode = missingCeros+code
         
         edge[x] = newCode
+
+def mostrarCarga(control):
+    a = ("Total estaciones transbordo: "+str(lt.size(control["model"]["listPerTransbordo"])))
+    a += "\n"
+    a += ("Total estaciones NO transbordo: "+str(lt.size(control["model"]["listPerNOTTransbordo"])))
+    a += "\n"
+    a += ("El total de arcos utilizados en todas las rutas de buses del grafo dirigido son: "+str(gr.numEdges(control["model"]["DiGraph"])))
+    a += "\n"
+    a += ("El total de arcos utilizados en todas las rutas de buses del grafo NO dirigido son: "+str(gr.numEdges(control["model"]["graph"])))
+    a += "\n"
+    return a
+    
+
 
 # Funciones de consulta sobre el catálogo
 

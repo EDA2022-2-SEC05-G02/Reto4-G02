@@ -150,8 +150,8 @@ def thread_cycle():
             printchooseCSV()
             suffix = fileChoose()
             controller.loadData(control, suffix)
-            print("Total estaciones transbordo: "+str(lt.size(control["model"]["listPerTransbordo"])))
-            print("Total estaciones NO transbordo: "+str(lt.size(control["model"]["listPerNOTTransbordo"])))
+            respuesta = controller.mostrarCarga(control)
+            print(respuesta)
             # for x in lt.iterator(control["model"]["listPerTransbordo"]):
             #     print(x)
             # print("="*20)
@@ -160,7 +160,7 @@ def thread_cycle():
 
 
         elif int(inputs[0]) == 1:
-            model.printVerteces("diGraph", control["model"])
+            model.printVerteces("DiGraph", control["model"])
 
         elif int(inputs[0]) == 2:
             pass

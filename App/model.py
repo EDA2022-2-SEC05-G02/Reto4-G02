@@ -79,7 +79,7 @@ def newAnalyzer():
                 }
     
     #Tiene el cálculo exacto para el tamaño sumando el total de busstops + transbordos
-    analyzer["diGraph"] = gr.newGraph(datastructure="ADJ_LIST", directed=True, size=5011, comparefunction=compareStopIds)
+    analyzer["DiGraph"] = gr.newGraph(datastructure="ADJ_LIST", directed=True, size=5011, comparefunction=compareStopIds)
     analyzer["graph"] = gr.newGraph(datastructure="ADJ_LIST", directed=False, size=5011, comparefunction=compareStopIds)
 
     #Tiene el número de elementos preciso, es decir, el número primo más cercano al producto del total de bustops x 4
@@ -134,7 +134,7 @@ def addEdgeToTransbordo (stop, graph, analyzer):
     id = str(stop["id"])
     transbordoCode = "T-"+str(id[0:4])
     gr.addEdge(graph, id, transbordoCode, 0.0)
-    if graph =="diGraph":
+    if graph =="DiGraph":
         gr.addEdge(graph, transbordoCode, id, 0.0)
 
 def addEdgesToGraph(edge, graph, analyzer):
@@ -148,7 +148,7 @@ def addEdgesToGraph(edge, graph, analyzer):
     
 
     gr.addEdge(graph, vertexA, vertexB, weight)
-    if graph =="diGraph":
+    if graph =="DiGraph":
         gr.addEdge(graph, vertexB, vertexA, weight)
     
 
