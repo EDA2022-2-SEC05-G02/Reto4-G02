@@ -73,7 +73,10 @@ def newAnalyzer():
                 "Arcos LIST": None,
                 "Vertices LIST": None,
                 "Totales HASH": None,
-                "rutas LIST": None}
+                "rutas LIST": None,
+                "listPerTransbordo": None,
+                "listPerNOTTransbordo": None,
+                }
     
     #Tiene el cálculo exacto para el tamaño sumando el total de busstops + transbordos
     analyzer["diGraph"] = gr.newGraph(datastructure="ADJ_LIST", directed=True, size=5011, comparefunction=compareStopIds)
@@ -85,6 +88,8 @@ def newAnalyzer():
     analyzer["id->Neighborhood_Name HASH"] = mp.newMap(numelements=18593, maptype='PROBING', loadfactor=0.5, comparefunction=compareMapID)
 
     analyzer["rutas LIST"] = lt.newList(cmpfunction=compareList)
+    analyzer["listPerTransbordo"] = lt.newList(cmpfunction=compareList)
+    analyzer["listPerNOTTransbordo"] = lt.newList(cmpfunction=compareList)
 
     #analyzer["Arcos LIST"] = lt.newList(datastructure='ARRAY_LIST', cmpfunction= ?????????? va a ser una lista literal solo de los pesos de los vértices? o que?)
     #analyzer["Vertices LIST"] = lt.newList(datastructure='ARRAY_LIST', cmpfunction= ?????? va a ser lit de solo los identificadores? pa que? toca preguntar)
@@ -108,6 +113,12 @@ def addVertexToGraph(stop, graph, analyzer):
     if stop["Transbordo"]=="S":
         if not(gr.containsVertex(graph, transbordo)):
             gr.insertVertex(graph=graph, vertex=transbordo)
+            lt.addLast(analyzer["listPerTransbordo"],transbordo)
+    else:
+        idEstacion = stop["id"][0:4]
+        if not(lt.isPresent(analyzer["listPerNOTTransbordo"],idEstacion)):
+            lt.addLast(analyzer["listPerNOTTransbordo"],transbordo)
+
 
     gr.insertVertex(graph=graph, vertex=id)
 
