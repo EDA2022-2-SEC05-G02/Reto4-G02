@@ -113,6 +113,7 @@ def addVertexToGraph(stop, graph, analyzer):
     if stop["Transbordo"]=="S":
         if not(gr.containsVertex(graph, transbordo)):
             gr.insertVertex(graph=graph, vertex=transbordo)
+        if not(lt.isPresent(analyzer["listPerTransbordo"],transbordo)):
             lt.addLast(analyzer["listPerTransbordo"],transbordo)
     else:
         idEstacion = stop["id"][0:4]
@@ -122,6 +123,11 @@ def addVertexToGraph(stop, graph, analyzer):
 
     gr.insertVertex(graph=graph, vertex=id)
 
+def ordenarListasExperimento (analyzer):
+    print("Voy a ordenar")
+    ms.sort(analyzer["listPerNOTTransbordo"],cmpRutas)
+    ms.sort(analyzer["listPerTransbordo"],cmpRutas)
+    print("Ya ordené, god")
 
 def addEdgeToTransbordo (stop, graph, analyzer):
     graph = analyzer[graph]

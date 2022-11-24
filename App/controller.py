@@ -74,6 +74,9 @@ def loadData(control, suffix):
         model.addEdgesToGraph(edge, "diGraph", analyzer)
         model.addEdgesToGraph(edge, "graph", analyzer)
 
+            #ESTO ERA PARA CONFIRMAR SI HABÍAN REPETIDOS O NO JAJA
+    # model.ordenarListasExperimento(analyzer)
+
     totalRutas = model.countRutas(analyzer)
 
     return control

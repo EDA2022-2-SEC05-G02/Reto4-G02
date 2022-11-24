@@ -152,6 +152,11 @@ def thread_cycle():
             controller.loadData(control, suffix)
             print("Total estaciones transbordo: "+str(lt.size(control["model"]["listPerTransbordo"])))
             print("Total estaciones NO transbordo: "+str(lt.size(control["model"]["listPerNOTTransbordo"])))
+            # for x in lt.iterator(control["model"]["listPerTransbordo"]):
+            #     print(x)
+            # print("="*20)
+            # for x in lt.iterator(control["model"]["listPerNOTTransbordo"]):
+            #     print(x)
 
 
         elif int(inputs[0]) == 1:
