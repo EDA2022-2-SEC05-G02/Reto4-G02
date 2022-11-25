@@ -161,6 +161,7 @@ def thread_cycle():
 
         elif int(inputs[0]) == 1:
             model.printVerteces("DiGraph", control["model"])
+            model.printEdges("DiGraph", control["model"])
 
         elif int(inputs[0]) == 2:
             pass

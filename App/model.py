@@ -134,8 +134,7 @@ def addEdgeToTransbordo (stop, graph, analyzer):
     id = str(stop["id"])
     transbordoCode = "T-"+str(id[0:4])
     gr.addEdge(graph, id, transbordoCode, 0.0)
-    if graph =="DiGraph":
-        gr.addEdge(graph, transbordoCode, id, 0.0)
+    gr.addEdge(graph, transbordoCode, id, 0.0)
 
 def addEdgesToGraph(edge, graph, analyzer):
     graph = analyzer[graph]
@@ -228,6 +227,12 @@ def printVerteces(graph, analyzer):
     list = gr.vertices(graph)
     for vertex in lt.iterator(list):
         print(vertex)
+
+def printEdges(graph, analyzer):
+    graph = analyzer[graph]
+    list = gr.edges(graph)
+    for edge in lt.iterator(list):
+        print(edge)
 
 def countRutas(analyzer):
     
