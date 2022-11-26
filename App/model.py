@@ -280,7 +280,7 @@ def firstAndLast5(graph, analyzer):
                 if edge["weight"] != 0:
                     adj += 1
 
-            element = {"identificador": identificador, "geo": coor, "adj": adj}
+            element = {"identificador": identificador, "geo": coor, "adj": adj/2}
             lt.addLast(firstAndLast5LIST, element)
         
     table = cargaDeDatosVISUAL(firstAndLast5LIST)
