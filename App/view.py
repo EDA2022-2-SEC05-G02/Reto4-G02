@@ -66,6 +66,7 @@ def printHeader(rqn, msg_rq, msg_answer):
     print("------------------------------------------------------------------------")
 
 def printMenu():
+    print("\n------------------------------------------------------------------------")
     print("Bienvenido")
     print("0- Cargar información en el catálogo")
     print("1- Buscar un camino posible entre dos estaciones (G)")
@@ -149,9 +150,13 @@ def thread_cycle():
             control = controller.newController()
             printchooseCSV()
             suffix = fileChoose()
-            controller.loadData(control, suffix)
+            control, totalRutas, area, longMin, longMax,  latMin, latMax, table = controller.loadData(control, suffix)
             respuesta = controller.mostrarCarga(control)
+            print("\nEl total de rutas de bus disponibles es: " + str(totalRutas))
             print(respuesta)
+            print(f"El rango del área rectangular de Barcelona que cubre la red de buses es: '{area}'\nLongitud Mínima: {longMin}\nLongitud Máxima: {longMax}\nLatitud Mínima: {latMin}\nLatitud Máxima: {latMax}\n")
+            print("Las primeras cinco y últimas cinco estaciones registradas en el grafo son las siguientes: ")
+            print(table)
             # for x in lt.iterator(control["model"]["listPerTransbordo"]):
             #     print(x)
             # print("="*20)
@@ -182,7 +187,7 @@ def thread_cycle():
             pass
 
         elif int(inputs[0]) == 8:
-            pass
+            controller.printkeys(control)
 
         else:
             sys.exit(0)

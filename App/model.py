@@ -45,6 +45,7 @@ from folium.plugins import MarkerCluster
 import math
 assert cf
 from DISClib.Algorithms.Sorting import mergesort as ms
+from prettytable import PrettyTable as ptbl
 
 
 #para intalar harvesine ejecutar en consola:               pip install haversine
@@ -76,6 +77,8 @@ def newAnalyzer():
                 "rutas LIST": None,
                 "listPerTransbordo": None,
                 "listPerNOTTransbordo": None,
+                "mapa de longitudes": None,
+                "mapa de latitudes": None
                 }
     
     #Tiene el cálculo exacto para el tamaño sumando el total de busstops + transbordos
@@ -90,6 +93,9 @@ def newAnalyzer():
     analyzer["rutas LIST"] = lt.newList(cmpfunction=compareList)
     analyzer["listPerTransbordo"] = lt.newList(cmpfunction=compareList)
     analyzer["listPerNOTTransbordo"] = lt.newList(cmpfunction=compareList)
+
+    analyzer["mapa de longitudes"] = om.newMap('BST', compareList)
+    analyzer["mapa de latitudes"] = om.newMap('BST', compareList)
 
     #analyzer["Arcos LIST"] = lt.newList(datastructure='ARRAY_LIST', cmpfunction= ?????????? va a ser una lista literal solo de los pesos de los vértices? o que?)
     #analyzer["Vertices LIST"] = lt.newList(datastructure='ARRAY_LIST', cmpfunction= ?????? va a ser lit de solo los identificadores? pa que? toca preguntar)
@@ -150,7 +156,8 @@ def addEdgesToGraph(edge, graph, analyzer):
     if graph =="DiGraph":
         gr.addEdge(graph, vertexB, vertexA, weight)
     
-
+def addCoord(coor, map):
+    om.put(map, coor, None)
 # Funciones para creacion de datos
 
 # Funciones de consulta
@@ -238,6 +245,7 @@ def countRutas(analyzer):
     
 
     rutasList = ms.sort(analyzer["rutas LIST"], cmpRutas)
+    
     uniques = 1
     last = lt.firstElement(rutasList)
     for ruta in lt.iterator(rutasList):
@@ -246,3 +254,82 @@ def countRutas(analyzer):
             last = ruta
 
     return uniques
+
+def rangoArea(analyzer):
+    longMin = om.minKey(analyzer["mapa de longitudes"])
+    longMax = om.maxKey(analyzer["mapa de longitudes"])
+
+    latMin = om.minKey(analyzer["mapa de latitudes"])
+    latMax = om.maxKey(analyzer["mapa de latitudes"])
+
+    area = (longMax-longMin) * (latMax-latMin)
+
+    return area, longMin, longMax,  latMin, latMax
+
+def firstAndLast5(graph, analyzer):
+    firstAndLast5LIST = lt.newList(cmpfunction=compareStopIds)
+    vertexLIST = gr.vertices(graph)
+
+    for vertex in lt.iterator(vertexLIST):
+        if vertex[0] != "T":
+            identificador = vertex
+            coor = getValueFast(analyzer["id->Coordenadas HASH"], identificador)
+            edgesLIST = gr.adjacentEdges(graph, vertex)
+            adj = 0
+            for edge in lt.iterator(edgesLIST):
+                if edge["weight"] != 0:
+                    adj += 1
+
+            element = {"identificador": identificador, "geo": coor, "adj": adj}
+            lt.addLast(firstAndLast5LIST, element)
+        
+    table = cargaDeDatosVISUAL(firstAndLast5LIST)
+
+    return table
+
+
+def printkeys(analyzer):
+    keys = mp.keySet(analyzer["id->Coordenadas HASH"])
+
+    for k in lt.iterator(keys):
+        print(k)
+
+
+#PARA IMPRIMIR TABLAS Y COSAS
+
+def cargaDeDatosVISUAL(list):
+    table = ptbl()
+    table.field_names = ["Identificador de la estación (Code-Ruta)", "Geolocalización (Latitud, Longitud)", "Número de estaciones de conexión"]
+    listSize = lt.size(list)
+
+    i = 1
+    while i <= 5:
+
+        stop = lt.getElement(list, i)
+        row = []
+        row.append(stop["identificador"])
+        row.append(stop["geo"])
+        row.append(stop["adj"])
+
+        table.add_row(row)
+        table.hrules = True
+
+        i += 1
+
+    j = listSize - 4
+  
+    while j <= listSize:
+
+        stop = lt.getElement(list, j)
+        row = []
+        row.append(stop["identificador"])
+        row.append(stop["geo"])
+        row.append(stop["adj"])
+
+        table.add_row(row)
+        table.hrules = True
+
+        j += 1
+
+
+    return table

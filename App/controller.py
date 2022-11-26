@@ -81,7 +81,11 @@ def loadData(control, suffix):
 
     totalRutas = model.countRutas(analyzer)
 
-    return control
+    area, longMin, longMax,  latMin, latMax = model.rangoArea(analyzer)
+
+    table = model.firstAndLast5(analyzer["graph"], analyzer)
+
+    return control, totalRutas, area, longMin, longMax,  latMin, latMax, table
 
 # Funciones de ordenamiento
 
@@ -92,6 +96,13 @@ def reformStop(stop, analyzer):
 
     ruta = stop["Bus_Stop"][6:]
     lt.addLast(analyzer["rutas LIST"], ruta)
+
+    mapaLongitudes = analyzer["mapa de longitudes"]
+    model.addCoord(stop["Longitude"], mapaLongitudes)
+
+    mapaLatitudes = analyzer["mapa de latitudes"]
+    model.addCoord(stop["Latitude"], mapaLatitudes)
+
 
 
 
@@ -176,3 +187,6 @@ def deltaTime(end, start):
     """
     elapsed = float(end - start)
     return elapsed
+
+def printkeys(control):
+    model.printkeys(control["model"])
