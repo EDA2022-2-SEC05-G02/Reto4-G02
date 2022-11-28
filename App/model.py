@@ -46,6 +46,7 @@ import math
 assert cf
 from DISClib.Algorithms.Sorting import mergesort as ms
 from prettytable import PrettyTable as ptbl
+from DISClib.Algorithms.Graphs import dfs
 
 
 #para intalar harvesine ejecutar en consola:               pip install haversine
@@ -164,6 +165,29 @@ def addCoord(coor, map):
 
 #! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 1]  =^..^=    =^..^=    =^..^=    =^..^=
 
+def buscarCaminoPosibleEntreDosEstaciones(graph, startStop, endStop):
+
+    search = dfs.DepthFirstSearch(graph, startStop)
+
+    if dfs.hasPathTo(search, endStop):
+        stack = dfs.pathTo(search, endStop)
+        totalStops = st.size(stack)
+        totalTransbordos = 0
+        path = lt.newList(cmpfunction=compareList)
+
+        while not(st.isEmpty(stack)):
+            stop = st.pop(stack)
+            if stop[0] == "T":
+                totalTransbordos += 1
+
+
+
+
+
+
+    else:
+        return None
+
 #! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 2]  =^..^=    =^..^=    =^..^=    =^..^=
 
 #! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 3]  =^..^=    =^..^=    =^..^=    =^..^=
@@ -280,7 +304,7 @@ def firstAndLast5(graph, analyzer):
                 if edge["weight"] != 0:
                     adj += 1
 
-            element = {"identificador": identificador, "geo": coor, "adj": adj/2}
+            element = {"identificador": identificador, "geo": coor, "adj": adj//2}
             lt.addLast(firstAndLast5LIST, element)
         
     table = cargaDeDatosVISUAL(firstAndLast5LIST)
