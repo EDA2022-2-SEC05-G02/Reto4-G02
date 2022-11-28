@@ -30,6 +30,7 @@ from DISClib.ADT import list as lt
 import folium
 import webbrowser
 assert cf
+from DISClib.ADT import graph as gr
 import model
 """
 La vista se encarga de la interacción con el usuario
@@ -154,6 +155,7 @@ def thread_cycle():
             respuesta = controller.mostrarCarga(control)
             print("\nEl total de rutas de bus disponibles es: " + str(totalRutas))
             print(respuesta)
+            # print("TOTAL VERTICES MAP:" + str(gr.numVertices(control["model"]["DiGraph"])))
             print(f"El rango del área rectangular de Barcelona que cubre la red de buses es: '{area}'\nLongitud Mínima: {longMin}\nLongitud Máxima: {longMax}\nLatitud Mínima: {latMin}\nLatitud Máxima: {latMax}\n")
             print("Las primeras cinco y últimas cinco estaciones registradas en el grafo son las siguientes: ")
             print(table)
