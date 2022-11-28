@@ -146,7 +146,7 @@ def thread_cycle():
     while True:
         printMenu()
         inputs = input('\nSeleccione una opción para continuar\n')
-        if int(inputs[0]) == 0:
+        if int(inputs) == 0:
             print("Cargando información de los archivos ....")
             control = controller.newController()
             printchooseCSV()
@@ -166,42 +166,42 @@ def thread_cycle():
             #     print(x)
 
 
-        elif int(inputs[0]) == 1:
+        elif int(inputs) == 1:
             estacionOrigen = input("¿Cúal es la estación de origen?: ")
             estacionDestino = input("¿Cúal es la estación de destino?: ")
             # model.printVerteces("DiGraph", control["model"])
             # model.printEdges("DiGraph", control["model"])
 
-        elif int(inputs[0]) == 2:
+        elif int(inputs) == 2:
             estacionOrigen = input("¿Cúal es la estación de origen?: ")
             estacionDestino = input("¿Cúal es la estación de destino?: ")
             pass
 
-        elif int(inputs[0]) == 3:
+        elif int(inputs) == 3:
                 #NO HAY ENTRADAS POR PARÁMETRO
             pass
 
-        elif int(inputs[0]) == 4:
+        elif int(inputs) == 4:
             localizaciónOrigen = input("¿Cúal es la localización de origen?: ")
             localizaciónDestino = input("¿Cúal es la localización de destino?: ")
 
             pass
 
-        elif int(inputs[0]) == 5:
+        elif int(inputs) == 5:
             estacionOrigen = input("¿Cúal es el identificador de la estación origen? (Code-IdBus): ")
             numeroConexiones = int(input("¿Cúal es el número de conexiones permitidas?: "))
             pass
 
-        elif int(inputs[0]) == 6:
+        elif int(inputs) == 6:
             estacionOrigen = input("¿Cúal es el identificador de la estación origen? (Code-IdBus): ")
             neighborhoodDestino = input("¿Cúal es el identificador del vecindario: ")
             pass
 
-        elif int(inputs[0]) == 7:
+        elif int(inputs) == 7:
             estacionOrigen = input("¿Cúal es el identificador de la estación origen? (Code-IdBus): ")
             pass
 
-        elif int(inputs[0]) == 8:
+        elif int(inputs) == 8:
             controller.printkeys(control)
 
         else:
