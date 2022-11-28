@@ -153,7 +153,13 @@ def mostrarCarga(control):
 
 #! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 2]  =^..^=    =^..^=    =^..^=    =^..^=
 
+def buscarCaminoOptimoEntreDosEstaciones(control, startStop, endStop):
+    analyzer = control["model"]
+    return model.buscarCaminoOptimoEntreDosEstaciones(analyzer, startStop, endStop)
 
+def distancias(control,pathList):
+    analyzer = control["model"]
+    return model.distancias(control,pathList)
 #! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 3]  =^..^=    =^..^=    =^..^=    =^..^=
 
 

@@ -173,10 +173,16 @@ def thread_cycle():
             # model.printEdges("DiGraph", control["model"])
 
         elif int(inputs) == 2:
-            estacionOrigen = input("¿Cúal es la estación de origen?: ")
-            estacionDestino = input("¿Cúal es la estación de destino?: ")
-            pass
-
+            # estacionOrigen = input("¿Cúal es la estación de origen?: ")
+            # estacionDestino = input("¿Cúal es la estación de destino?: ")
+            estacionOrigen = "0036-109"
+            estacionDestino = "0058-D40"
+            totalStops, pathList, totalTransbordos = controller.buscarCaminoOptimoEntreDosEstaciones(control,estacionOrigen,estacionDestino)
+            resp1 = ("El total de estaciones que contiene el camino solución es (Sin contar Transbordos):"+str(totalStops-totalTransbordos))
+            resp2 = ("El total de transbordos de ruta que debe realizar el usuario es: "+str(totalTransbordos))
+                #! ESTO ESTA MAL, AUN NO ME DA XD
+            resp0,resp4 = controller.distancias(control,pathList)
+            print(resp4)
         elif int(inputs) == 3:
                 #NO HAY ENTRADAS POR PARÁMETRO
             pass
@@ -203,6 +209,9 @@ def thread_cycle():
 
         elif int(inputs) == 8:
             controller.printkeys(control)
+
+        elif int(inputs) == 9:
+            print("VOY A PROBAR COSAS")
 
         else:
             sys.exit(0)

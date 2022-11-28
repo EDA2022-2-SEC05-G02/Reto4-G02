@@ -47,6 +47,7 @@ assert cf
 from DISClib.Algorithms.Sorting import mergesort as ms
 from prettytable import PrettyTable as ptbl
 from DISClib.Algorithms.Graphs import dfs
+from DISClib.Algorithms.Graphs import bfs
 
 
 #para intalar harvesine ejecutar en consola:               pip install haversine
@@ -68,7 +69,7 @@ def newAnalyzer():
     """    
     
     analyzer = {"DiGraph": None,
-                "Graph": None,
+                "graph": None,
                 "id->Coordenadas HASH": None,
                 "id->District_Name HASH":None,
                 "id->Neighborhood_Name HASH":None,
@@ -179,16 +180,51 @@ def buscarCaminoPosibleEntreDosEstaciones(graph, startStop, endStop):
             stop = st.pop(stack)
             if stop[0] == "T":
                 totalTransbordos += 1
-
-
-
-
-
-
     else:
         return None
 
 #! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 2]  =^..^=    =^..^=    =^..^=    =^..^=
+
+def buscarCaminoOptimoEntreDosEstaciones(analyzer, startStop, endStop):
+    graph = analyzer["graph"]
+    search = bfs.BreadhtFisrtSearch(graph, startStop)
+
+    if bfs.hasPathTo(search, endStop):
+        stack = bfs.pathTo(search, endStop)
+        totalStops = st.size(stack)
+        totalTransbordos = 0
+        pathList = lt.newList(cmpfunction=compareList)
+
+        while not(st.isEmpty(stack)):
+            stop = st.pop(stack)
+            lt.addLast(pathList,stop)
+            print(stop)
+            if stop[0] == "T":
+                totalTransbordos += 1
+    else:
+        print("No hay nada")
+    return totalStops, pathList, totalTransbordos
+
+def distancias(analyzer,pathList):
+    distanciaTotal = 0
+    pesosList = lt.newList("SINGLE_LINKED")
+    txt=""
+    newList = lt.newList("SINGLE_LINKED")
+    for elemento in lt.iterator(pathList):
+        if not(elemento[0]=="T"):
+            lt.addFirst(newList,elemento)
+    while (lt.size(newList))>1:
+        uno = lt.firstElement(newList)
+        txt += str(uno) + " --> "
+        lt.removeFirst(newList)
+        dos = lt.firstElement(newList)
+        coorA = getValueFast(analyzer["id->Coordenadas HASH"], uno[0:3])
+        coorB = getValueFast(analyzer["id->Coordenadas HASH"], dos[0:3])
+        weight = haversine(coorA, coorB)
+        txt += str(weight) + "Km --> "
+        lt.addLast(pesosList,weight)
+
+    return distanciaTotal,txt
 
 #! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 3]  =^..^=    =^..^=    =^..^=    =^..^=
 
