@@ -176,8 +176,7 @@ def thread_cycle():
             # model.printEdges("DiGraph", control["model"])
 
         elif int(inputs) == 2:
-
-            #!  DATOS TENTATIVOS QUE SIRVEN
+                #!  DATOS TENTATIVOS QUE SIRVEN
             # estacionOrigen = "0036-109"
             # estacionDestino = "0058-D40"
             estacionOrigen = input("¿Cúal es la estación de origen?: ")
@@ -194,9 +193,12 @@ def thread_cycle():
             pass
 
         elif int(inputs) == 4:
-            localizaciónOrigen = input("¿Cúal es la localización de origen?: ")
-            localizaciónDestino = input("¿Cúal es la localización de destino?: ")
-
+            # DATOS TENTATIVOS QUE !!!DEBERÍAN!!! SERVIR
+            # 2.221753 , 41.41319
+            # 2.103144 , 41.41127
+            localizacionOrigen = input("¿Cúal es la localización de origen?: ")
+            localizacionDestino = input("¿Cúal es la localización de destino?: ")
+            controller.requerimientoCuatro(control,localizacionOrigen,localizacionDestino)
             pass
 
         elif int(inputs) == 5:

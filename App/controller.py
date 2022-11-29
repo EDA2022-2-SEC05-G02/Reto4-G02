@@ -150,6 +150,7 @@ def mostrarCarga(control):
 
 #! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 1]  =^..^=    =^..^=    =^..^=    =^..^=
 
+        # NO SE HACE PORQUE SOLO SOMOS DOS
 
 #! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 2]  =^..^=    =^..^=    =^..^=    =^..^=
 
@@ -162,9 +163,17 @@ def distancias(control,pathList):
     return model.distancias(analyzer,pathList)
 #! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 3]  =^..^=    =^..^=    =^..^=    =^..^=
 
+        # NO SE HACE PORQUE SOLO SOMOS DOS
 
 #! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 4]  =^..^=    =^..^=    =^..^=    =^..^=
 
+def requerimientoCuatro(control,localizacionOrigen,localizacionDestino):
+    listaBoba = localizacionOrigen.split(",")
+    localizacionOrigen = (float(listaBoba[1].strip()),float(listaBoba[0].strip()))
+    listaBoba = localizacionDestino.split(",")
+    localizacionDestino = (float(listaBoba[1].strip()),float(listaBoba[0].strip()))
+    analyzer = control["model"]
+    return model.requerimientoCuatro(analyzer,localizacionOrigen,localizacionDestino)
 
 #! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 5]  =^..^=    =^..^=    =^..^=    =^..^=
 

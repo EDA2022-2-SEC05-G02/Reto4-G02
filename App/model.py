@@ -213,9 +213,7 @@ def distancias(analyzer,pathList):
     for elemento in lt.iterator(pathList):
         if not(elemento[0]=="T"):
             lt.addLast(newList,elemento)
-    
-# ESTA PARTE SIRVE >:(
-
+        # ACÁ SE LIMPIAN LOS DATOS (SE QUITAN LOS TRANSBORDOS)
     while (lt.size(newList))>1:
         uno = lt.firstElement(newList)
         txt += str(uno) + " --> "
@@ -233,6 +231,46 @@ def distancias(analyzer,pathList):
 #! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 3]  =^..^=    =^..^=    =^..^=    =^..^=
 
 #! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 4]  =^..^=    =^..^=    =^..^=    =^..^=
+
+def requerimientoCuatro(analyzer,localizacionOrigen,localizacionDestino):
+    hashMap = analyzer["id->Coordenadas HASH"]
+    distanciaMinimaOrigen,listEstacionesOrigen = estacionMasCercana(hashMap,localizacionOrigen)
+    distanciaMinimaDestino,listEstacionesDestino = estacionMasCercana(hashMap,localizacionDestino)
+
+    # for x in lt.iterator(listEstacionesOrigen):
+    #     print(x)
+    # print(distanciaMinimaOrigen)
+    # print("="*15)
+    # for x in lt.iterator(listEstacionesDestino):
+    #     print(x)
+    # print(distanciaMinimaDestino)
+
+        #! YA ENCUENTRA LA ESTACIÓN MÁS CERCANA
+
+    return None
+
+def estacionMasCercana (hashMap,location):
+    keyList = mp.keySet(hashMap)
+    arbolitoRBT = om.newMap("BST",compareList)
+    for key in lt.iterator(keyList):
+        tupla = getValueFast(hashMap,key)
+        tupla = (float(tupla[0]),float(tupla[1]))
+        distancia = haversine(tupla,location)
+
+            #ACÁ METEMOS EN EL RBT COMO LLAVE LA DISTANCIA (PARA LUEGO SACAR LA MENOR)
+            #Y COMO VALOR EL NOMBRE DEL NODO EN EL GRÁFO, PARA SACARLO LUEGO
+        if not(om.contains(arbolitoRBT,distancia)):
+            listitaDeNodos = lt.newList("SINGLE_LINKED",compareList)
+            om.put(arbolitoRBT,distancia,listitaDeNodos)
+        llaveValor = om.get(arbolitoRBT,distancia)
+        listitaDeNodosALlenar = me.getValue(llaveValor)
+        lt.addLast(listitaDeNodosALlenar,key)
+    distanciaMinima = om.minKey(arbolitoRBT)
+    aaa = om.get(arbolitoRBT,distanciaMinima)
+    listResp = me.getValue(aaa)
+    return distanciaMinima,listResp
+    
+
 
 #! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 5]  =^..^=    =^..^=    =^..^=    =^..^=
 
