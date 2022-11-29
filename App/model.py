@@ -48,6 +48,7 @@ from DISClib.Algorithms.Sorting import mergesort as ms
 from prettytable import PrettyTable as ptbl
 from DISClib.Algorithms.Graphs import dfs
 from DISClib.Algorithms.Graphs import bfs
+from DISClib.Algorithms.Graphs import dijsktra as dj
 
 
 #para intalar harvesine ejecutar en consola:               pip install haversine
@@ -234,9 +235,10 @@ def distancias(analyzer,pathList):
 
 def requerimientoCuatro(analyzer,localizacionOrigen,localizacionDestino):
     hashMap = analyzer["id->Coordenadas HASH"]
+    graph = analyzer["graph"]
     distanciaMinimaOrigen,listEstacionesOrigen = estacionMasCercana(hashMap,localizacionOrigen)
     distanciaMinimaDestino,listEstacionesDestino = estacionMasCercana(hashMap,localizacionDestino)
-
+        #!PRUEBA
     # for x in lt.iterator(listEstacionesOrigen):
     #     print(x)
     # print(distanciaMinimaOrigen)
@@ -244,14 +246,33 @@ def requerimientoCuatro(analyzer,localizacionOrigen,localizacionDestino):
     # for x in lt.iterator(listEstacionesDestino):
     #     print(x)
     # print(distanciaMinimaDestino)
-
         #! YA ENCUENTRA LA ESTACIÓN MÁS CERCANA
+    rbtStacksPerWeight = om.newMap("RBT",compareList)
+    for estacionOrigen in lt.iterator(listEstacionesOrigen):
+        for estacionDestino in lt.iterator(listEstacionesDestino):
+            paths = dj.Dijkstra(graph,estacionOrigen)
+            if dj.hasPathTo(paths, estacionDestino):
+                stack = dj.pathTo(paths, estacionDestino)
+                weightAllPath = dj.distTo(paths,estacionDestino)
+                if not(mp.contains(rbtStacksPerWeight,weightAllPath)):
+                    mp.put(rbtStacksPerWeight,weightAllPath,stack)
+    
+    # ya tenemos un RBT ordenado por el peso de los caminos
 
-    return None
+    pesoMinimo = om.minKey(rbtStacksPerWeight)
+    llaveValor = om.get(rbtStacksPerWeight,pesoMinimo)
+    stackMenor = me.getValue(llaveValor)
+    pathList = lt.newList(cmpfunction=compareList)
+
+    while not(st.isEmpty(stackMenor)):
+        stop = st.pop(stackMenor)
+        lt.addLast(pathList,stop)
+
+    return distanciaMinimaOrigen,distanciaMinimaDestino,pesoMinimo,pathList
 
 def estacionMasCercana (hashMap,location):
     keyList = mp.keySet(hashMap)
-    arbolitoRBT = om.newMap("BST",compareList)
+    arbolitoRBT = om.newMap("RBT",compareList)
     for key in lt.iterator(keyList):
         tupla = getValueFast(hashMap,key)
         tupla = (float(tupla[0]),float(tupla[1]))
@@ -266,8 +287,8 @@ def estacionMasCercana (hashMap,location):
         listitaDeNodosALlenar = me.getValue(llaveValor)
         lt.addLast(listitaDeNodosALlenar,key)
     distanciaMinima = om.minKey(arbolitoRBT)
-    aaa = om.get(arbolitoRBT,distanciaMinima)
-    listResp = me.getValue(aaa)
+    llaveValor = om.get(arbolitoRBT,distanciaMinima)
+    listResp = me.getValue(llaveValor)
     return distanciaMinima,listResp
     
 

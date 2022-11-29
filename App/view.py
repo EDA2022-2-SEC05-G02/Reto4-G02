@@ -170,6 +170,9 @@ def thread_cycle():
 
 
         elif int(inputs) == 1:
+
+                # ESTOS NO LO HACEMOS PORQUE SOMOS SOLO 2
+
             estacionOrigen = input("¿Cúal es la estación de origen?: ")
             estacionDestino = input("¿Cúal es la estación de destino?: ")
             # model.printVerteces("DiGraph", control["model"])
@@ -187,7 +190,7 @@ def thread_cycle():
                 #! ESTO ESTA MAL, AUN NO ME DA XD
             resp0,resp3 = controller.distancias(control,pathList)
             resp0 = ("La distancia total que toma el camino entre la estación origen y la estación destino es: "+str(round(resp0,2))+"Km")
-            printeador(resp0,resp1,resp2,resp3)
+            printeador(resp0,resp1,resp2,(resp3+estacionDestino))
         elif int(inputs) == 3:
                 #NO HAY ENTRADAS POR PARÁMETRO
             pass
@@ -202,6 +205,7 @@ def thread_cycle():
             pass
 
         elif int(inputs) == 5:
+                # ESTOS NO LO HACEMOS PORQUE SOMOS SOLO 2
             estacionOrigen = input("¿Cúal es el identificador de la estación origen? (Code-IdBus): ")
             numeroConexiones = int(input("¿Cúal es el número de conexiones permitidas?: "))
             pass
