@@ -198,7 +198,6 @@ def buscarCaminoOptimoEntreDosEstaciones(analyzer, startStop, endStop):
         while not(st.isEmpty(stack)):
             stop = st.pop(stack)
             lt.addLast(pathList,stop)
-            print(stop)
             if stop[0] == "T":
                 totalTransbordos += 1
     else:
@@ -206,22 +205,27 @@ def buscarCaminoOptimoEntreDosEstaciones(analyzer, startStop, endStop):
     return totalStops, pathList, totalTransbordos
 
 def distancias(analyzer,pathList):
+    hashMap = analyzer["id->Coordenadas HASH"]
     distanciaTotal = 0
     pesosList = lt.newList("SINGLE_LINKED")
     txt=""
     newList = lt.newList("SINGLE_LINKED")
     for elemento in lt.iterator(pathList):
         if not(elemento[0]=="T"):
-            lt.addFirst(newList,elemento)
+            lt.addLast(newList,elemento)
+    
+# ESTA PARTE SIRVE >:(
+
     while (lt.size(newList))>1:
         uno = lt.firstElement(newList)
         txt += str(uno) + " --> "
         lt.removeFirst(newList)
         dos = lt.firstElement(newList)
-        coorA = getValueFast(analyzer["id->Coordenadas HASH"], uno[0:3])
-        coorB = getValueFast(analyzer["id->Coordenadas HASH"], dos[0:3])
+        coorA = getValueFast(hashMap, uno)
+        coorB = getValueFast(hashMap, dos)
         weight = haversine(coorA, coorB)
-        txt += str(weight) + "Km --> "
+        txt += str(round(weight,2)) + "Km --> "
+        distanciaTotal += weight
         lt.addLast(pesosList,weight)
 
     return distanciaTotal,txt

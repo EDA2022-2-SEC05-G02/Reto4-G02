@@ -159,7 +159,7 @@ def buscarCaminoOptimoEntreDosEstaciones(control, startStop, endStop):
 
 def distancias(control,pathList):
     analyzer = control["model"]
-    return model.distancias(control,pathList)
+    return model.distancias(analyzer,pathList)
 #! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 3]  =^..^=    =^..^=    =^..^=    =^..^=
 
 

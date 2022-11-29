@@ -66,6 +66,9 @@ def printHeader(rqn, msg_rq, msg_answer):
     print(msg_answer)
     print("------------------------------------------------------------------------")
 
+def printeador(resp0=None,resp1=None,resp2=None,resp3=None,resp4=None):
+    [(print(i+"\n")) for i in (resp0,resp1,resp2,resp3,resp4) if i!=None]
+
 def printMenu():
     print("\n------------------------------------------------------------------------")
     print("Bienvenido")
@@ -178,11 +181,12 @@ def thread_cycle():
             estacionOrigen = "0036-109"
             estacionDestino = "0058-D40"
             totalStops, pathList, totalTransbordos = controller.buscarCaminoOptimoEntreDosEstaciones(control,estacionOrigen,estacionDestino)
-            resp1 = ("El total de estaciones que contiene el camino solución es (Sin contar Transbordos):"+str(totalStops-totalTransbordos))
+            resp1 = ("El total de estaciones que contiene el camino solución es (Sin contar Transbordos): "+str(totalStops-totalTransbordos))
             resp2 = ("El total de transbordos de ruta que debe realizar el usuario es: "+str(totalTransbordos))
                 #! ESTO ESTA MAL, AUN NO ME DA XD
-            resp0,resp4 = controller.distancias(control,pathList)
-            print(resp4)
+            resp0,resp3 = controller.distancias(control,pathList)
+            resp0 = ("La distancia total que toma el camino entre la estación origen y la estación destino es: "+str(round(resp0,2)))
+            printeador(resp0,resp1,resp2,resp3)
         elif int(inputs) == 3:
                 #NO HAY ENTRADAS POR PARÁMETRO
             pass
