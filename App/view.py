@@ -176,16 +176,18 @@ def thread_cycle():
             # model.printEdges("DiGraph", control["model"])
 
         elif int(inputs) == 2:
-            # estacionOrigen = input("¿Cúal es la estación de origen?: ")
-            # estacionDestino = input("¿Cúal es la estación de destino?: ")
-            estacionOrigen = "0036-109"
-            estacionDestino = "0058-D40"
+
+            #!  DATOS TENTATIVOS QUE SIRVEN
+            # estacionOrigen = "0036-109"
+            # estacionDestino = "0058-D40"
+            estacionOrigen = input("¿Cúal es la estación de origen?: ")
+            estacionDestino = input("¿Cúal es la estación de destino?: ")
             totalStops, pathList, totalTransbordos = controller.buscarCaminoOptimoEntreDosEstaciones(control,estacionOrigen,estacionDestino)
             resp1 = ("El total de estaciones que contiene el camino solución es (Sin contar Transbordos): "+str(totalStops-totalTransbordos))
             resp2 = ("El total de transbordos de ruta que debe realizar el usuario es: "+str(totalTransbordos))
                 #! ESTO ESTA MAL, AUN NO ME DA XD
             resp0,resp3 = controller.distancias(control,pathList)
-            resp0 = ("La distancia total que toma el camino entre la estación origen y la estación destino es: "+str(round(resp0,2)))
+            resp0 = ("La distancia total que toma el camino entre la estación origen y la estación destino es: "+str(round(resp0,2))+"Km")
             printeador(resp0,resp1,resp2,resp3)
         elif int(inputs) == 3:
                 #NO HAY ENTRADAS POR PARÁMETRO
