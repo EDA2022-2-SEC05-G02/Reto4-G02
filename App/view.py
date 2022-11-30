@@ -201,8 +201,11 @@ def thread_cycle():
             # 2.103144 , 41.41127
             localizacionOrigen = input("¿Cúal es la localización de origen?: ")
             localizacionDestino = input("¿Cúal es la localización de destino?: ")
-            controller.requerimientoCuatro(control,localizacionOrigen,localizacionDestino)
-            pass
+            distanciaMinimaOrigen,distanciaMinimaDestino,pesoMinimo,pathList = controller.requerimientoCuatro(control,localizacionOrigen,localizacionDestino)
+            for x in lt.iterator(pathList):
+                print(x)
+            print("="*20)
+            print(pesoMinimo)
 
         elif int(inputs) == 5:
                 # ESTOS NO LO HACEMOS PORQUE SOMOS SOLO 2
