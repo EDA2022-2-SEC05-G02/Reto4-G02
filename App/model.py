@@ -176,11 +176,36 @@ def buscarCaminoPosibleEntreDosEstaciones(graph, startStop, endStop):
         totalStops = st.size(stack)
         totalTransbordos = 0
         path = lt.newList(cmpfunction=compareList)
+        totalDistance = 0
+
 
         while not(st.isEmpty(stack)):
             stop = st.pop(stack)
             if stop[0] == "T":
                 totalTransbordos += 1
+                nextStop = st.top(stack)
+                stop = stop + f"   -- Realiza transbordo a la ruta ({nextStop})"
+                lt.addLast(path, stop)
+
+            elif st.size(stack) > 0:
+                nextStop = st.top(stack)
+                if nextStop[0] == "T":
+                    stop = stop + f" !! Parada en estación de transbordo ({nextStop})"
+                    lt.addLast(path, stop)
+
+                else:
+                    edge = gr.getEdge(graph, stop, nextStop)
+                    distance = edge['weight']
+                    totalDistance += distance
+                    stop = stop + f" -> Distancia a la siguiente parada ({nextStop}) : {round(distance, 2)} Km"
+                    lt.addLast(path, stop)
+
+            else:
+                stop = stop + " < Destino"
+                lt.addLast(path, stop)
+
+        return round(totalDistance, 2), totalStops, totalTransbordos, path
+
     else:
         return None
 

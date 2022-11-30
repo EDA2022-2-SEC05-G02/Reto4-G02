@@ -64,7 +64,7 @@ def printHeader(rqn, msg_rq, msg_answer):
     print(msg_rq)
     print("\n============= Req No. " + str(rqn) + " Answer =============" )
     print(msg_answer)
-    print("------------------------------------------------------------------------")
+    print("------------------------------------------------------------------------\n")
 
 def printeador(resp0=None,resp1=None,resp2=None,resp3=None,resp4=None):
     [(print(i+"\n")) for i in (resp0,resp1,resp2,resp3,resp4) if i!=None]
@@ -175,6 +175,21 @@ def thread_cycle():
 
             estacionOrigen = input("¿Cúal es la estación de origen?: ")
             estacionDestino = input("¿Cúal es la estación de destino?: ")
+            
+            respuesta = controller.buscarCaminoPosibleEntreDosEstaciones(control["model"], "DiGraph", estacionOrigen, estacionDestino)
+            if respuesta == None:
+                msg1=f"Búsqueda de un camino posible entre las estaciones '{estacionOrigen}' y '{estacionDestino}'. "
+                msg2=f"No hay camino posible entre las estaciones '{estacionOrigen}' y '{estacionDestino}'."
+                printHeader(1, msg1, msg2)
+            else:
+                totalDistance, totalStops, totalTransbordos, path = respuesta
+                msg1=f"Búsqueda de un camino posible entre las estaciones '{estacionOrigen}' y '{estacionDestino}'. "
+                msg2=f"Existe camino entre las estaciones '{estacionOrigen}' y '{estacionDestino}'.\n->DISTANCIA TOTAL RECORRIDA: '{totalDistance}' Km\n->TOTAL ESTACIONES EN EL CAMINO: '{totalStops}'\n->TOTAL TRANSBORDOS: '{totalTransbordos}'"
+                printHeader(1, msg1, msg2)
+                for stop in lt.iterator(path):
+                    print(">>> " + stop)
+                    if not(stop[11:] == "Destino"):
+                        print(":")
             # model.printVerteces("DiGraph", control["model"])
             # model.printEdges("DiGraph", control["model"])
 

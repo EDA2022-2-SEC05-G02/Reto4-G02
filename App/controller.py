@@ -150,6 +150,11 @@ def mostrarCarga(control):
 
 #! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 1]  =^..^=    =^..^=    =^..^=    =^..^=
 
+def buscarCaminoPosibleEntreDosEstaciones(analyzer, graph, startStop, endStop):
+    respuesta = model.buscarCaminoPosibleEntreDosEstaciones(analyzer[graph], startStop, endStop)
+
+    return respuesta
+
         # NO SE HACE PORQUE SOLO SOMOS DOS
 
 #! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 2]  =^..^=    =^..^=    =^..^=    =^..^=
