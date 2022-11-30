@@ -212,7 +212,7 @@ def buscarCaminoPosibleEntreDosEstaciones(graph, startStop, endStop):
 #! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 2]  =^..^=    =^..^=    =^..^=    =^..^=
 
 def buscarCaminoOptimoEntreDosEstaciones(analyzer, startStop, endStop):
-    graph = analyzer["graph"]
+    graph = analyzer["DiGraph"]
     search = bfs.BreadhtFisrtSearch(graph, startStop)
 
     if bfs.hasPathTo(search, endStop):
@@ -260,7 +260,7 @@ def distancias(analyzer,pathList):
 
 def requerimientoCuatro(analyzer,localizacionOrigen,localizacionDestino):
     hashMap = analyzer["id->Coordenadas HASH"]
-    graph = analyzer["graph"]
+    graph = analyzer["DiGraph"]
     distanciaMinimaOrigen,listEstacionesOrigen = estacionMasCercana(hashMap,localizacionOrigen)
     distanciaMinimaDestino,listEstacionesDestino = estacionMasCercana(hashMap,localizacionDestino)
         #!PRUEBA
@@ -274,8 +274,8 @@ def requerimientoCuatro(analyzer,localizacionOrigen,localizacionDestino):
         #! YA ENCUENTRA LA ESTACIÓN MÁS CERCANA
     rbtStacksPerWeight = om.newMap("RBT",compareList)
     for estacionOrigen in lt.iterator(listEstacionesOrigen):
+        paths = dj.Dijkstra(graph,estacionOrigen)
         for estacionDestino in lt.iterator(listEstacionesDestino):
-            paths = dj.Dijkstra(graph,estacionOrigen)
             if dj.hasPathTo(paths, estacionDestino):
                 stack = dj.pathTo(paths, estacionDestino)
                 weightAllPath = dj.distTo(paths,estacionDestino)
