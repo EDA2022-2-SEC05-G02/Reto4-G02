@@ -159,7 +159,7 @@ def thread_cycle():
             print("\nEl total de rutas de bus disponibles es: " + str(totalRutas))
             print(respuesta)
             # print("TOTAL VERTICES MAP:" + str(gr.numVertices(control["model"]["DiGraph"])))
-            print(f"El rango del área rectangular de Barcelona que cubre la red de buses es: '{area}'\nLongitud Mínima: {longMin}\nLongitud Máxima: {longMax}\nLatitud Mínima: {latMin}\nLatitud Máxima: {latMax}\n")
+            print(f"El rango del área rectangular de Barcelona que cubre la red de buses es: '{round(area, 4)}' Km^2\nLongitud Mínima: {round(longMin, 4)}\nLongitud Máxima: {round(longMax, 4)}\nLatitud Mínima: {round(latMin, 4)}\nLatitud Máxima: {round(latMax, 4)}\n")
             print("Las primeras cinco y últimas cinco estaciones registradas en el grafo son las siguientes: ")
             print(table)
             # for x in lt.iterator(control["model"]["listPerTransbordo"]):
@@ -184,7 +184,7 @@ def thread_cycle():
             else:
                 totalDistance, totalStops, totalTransbordos, path = respuesta
                 msg1=f"Búsqueda de un camino posible entre las estaciones '{estacionOrigen}' y '{estacionDestino}'. "
-                msg2=f"Existe camino entre las estaciones '{estacionOrigen}' y '{estacionDestino}'.\n->DISTANCIA TOTAL RECORRIDA: '{totalDistance}' Km\n->TOTAL ESTACIONES EN EL CAMINO: '{totalStops}'\n->TOTAL TRANSBORDOS: '{totalTransbordos}'"
+                msg2=f"Existe camino entre las estaciones '{estacionOrigen}' y '{estacionDestino}'.\n-> DISTANCIA TOTAL RECORRIDA: '{totalDistance}' Km\n-> TOTAL ESTACIONES EN EL CAMINO: '{totalStops}'\n-> TOTAL TRANSBORDOS: '{totalTransbordos}'"
                 printHeader(1, msg1, msg2)
                 for stop in lt.iterator(path):
                     print(">>> " + stop)
