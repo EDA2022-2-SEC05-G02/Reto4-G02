@@ -165,6 +165,55 @@ def addCoord(coor, map):
 
 # Funciones de consulta
 
+
+#! =^..^=   =^..^=   =^..^=    =^..^=  [FUNCIÓN DE IMPRESIÓN (creo)]  =^..^=    =^..^=    =^..^=    =^..^=
+
+def intentoPrinteador(stackDado, graph):
+    totalTransbordos = 0
+    path = lt.newList(cmpfunction=compareList)
+    totalDistance = 0
+    while not(st.isEmpty(stackDado)):
+        stop = st.pop(stackDado)
+        if stop[0] == "T":
+            totalTransbordos += 1
+            nextStop = st.top(stackDado)
+            stop = stop + f"   -- Realiza transbordo a la ruta ({nextStop})"
+            lt.addLast(path, stop)
+
+        elif st.size(stackDado) > 0:
+            nextStop = st.top(stackDado)
+            if nextStop[0] == "T":
+                stop = stop + f" !! Parada en estación de transbordo ({nextStop})"
+                lt.addLast(path, stop)
+
+            else:
+                edge = gr.getEdge(graph, stop, nextStop)
+                distance = edge['weight']
+                totalDistance += distance
+                stop = stop + f" -> Distancia a la siguiente parada ({nextStop}) : {round(distance, 2)} Km"
+                lt.addLast(path, stop)
+
+        else:
+            stop = stop + " < Destino"
+            lt.addLast(path, stop)
+
+    for stop in lt.iterator(path):
+        print(">>> " + stop)
+        if not(stop[11:] == "Destino"):
+            print(":")
+        else:
+            print("\n")
+    return totalTransbordos,totalDistance
+
+def printeadorReqCuatro(stackDado):
+    textote = ""
+    while not(st.isEmpty(stackDado)):
+        stop = st.pop(stackDado)
+        verticeA = stop["vertexA"]
+        verticeB = stop["vertexB"]
+        peso = stop["weight"]
+        textote += f"para ir de {verticeA} --> {verticeB} necesitas recorrer {round(peso,2)}KM \n"
+    return textote
 #! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 1]  =^..^=    =^..^=    =^..^=    =^..^=
 
 def buscarCaminoPosibleEntreDosEstaciones(graph, startStop, endStop):
@@ -218,17 +267,9 @@ def buscarCaminoOptimoEntreDosEstaciones(analyzer, startStop, endStop):
     if bfs.hasPathTo(search, endStop):
         stack = bfs.pathTo(search, endStop)
         totalStops = st.size(stack)
-        totalTransbordos = 0
-        pathList = lt.newList(cmpfunction=compareList)
-
-        while not(st.isEmpty(stack)):
-            stop = st.pop(stack)
-            lt.addLast(pathList,stop)
-            if stop[0] == "T":
-                totalTransbordos += 1
     else:
         print("No hay nada")
-    return totalStops, pathList, totalTransbordos
+    return totalStops, stack
 
 def distancias(analyzer,pathList):
     hashMap = analyzer["id->Coordenadas HASH"]
@@ -287,13 +328,8 @@ def requerimientoCuatro(analyzer,localizacionOrigen,localizacionDestino):
     pesoMinimo = om.minKey(rbtStacksPerWeight)
     llaveValor = om.get(rbtStacksPerWeight,pesoMinimo)
     stackMenor = me.getValue(llaveValor)
-    pathList = lt.newList(cmpfunction=compareList)
 
-    while not(st.isEmpty(stackMenor)):
-        stop = st.pop(stackMenor)
-        lt.addLast(pathList,stop)
-
-    return distanciaMinimaOrigen,distanciaMinimaDestino,pesoMinimo,pathList
+    return distanciaMinimaOrigen,distanciaMinimaDestino,pesoMinimo,stackMenor
 
 def estacionMasCercana (hashMap,location):
     keyList = mp.keySet(hashMap)

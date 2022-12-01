@@ -171,8 +171,6 @@ def thread_cycle():
 
         elif int(inputs) == 1:
 
-                # ESTOS NO LO HACEMOS PORQUE SOMOS SOLO 2
-
             estacionOrigen = input("¿Cúal es la estación de origen?: ")
             estacionDestino = input("¿Cúal es la estación de destino?: ")
             
@@ -199,13 +197,12 @@ def thread_cycle():
             # estacionDestino = "0058-D40"
             estacionOrigen = input("¿Cúal es la estación de origen?: ")
             estacionDestino = input("¿Cúal es la estación de destino?: ")
-            totalStops, pathList, totalTransbordos = controller.buscarCaminoOptimoEntreDosEstaciones(control,estacionOrigen,estacionDestino)
+            totalStops, stack = controller.buscarCaminoOptimoEntreDosEstaciones(control,estacionOrigen,estacionDestino)
+                #! ESTO ESTA MAL, AUN NO ME DA XD
             resp1 = ("El total de estaciones que contiene el camino solución es (Sin contar Transbordos): "+str(totalStops-totalTransbordos))
             resp2 = ("El total de transbordos de ruta que debe realizar el usuario es: "+str(totalTransbordos))
-                #! ESTO ESTA MAL, AUN NO ME DA XD
-            resp0,resp3 = controller.distancias(control,pathList)
-            resp0 = ("La distancia total que toma el camino entre la estación origen y la estación destino es: "+str(round(resp0,2))+"Km")
-            printeador(resp0,resp1,resp2,(resp3+estacionDestino))
+            resp0 = ("La distancia total que toma el camino entre la estación origen y la estación destino es: "+str(round(totalDistance,2))+"Km")
+            printeador(resp0,resp1,resp2)
         elif int(inputs) == 3:
                 #NO HAY ENTRADAS POR PARÁMETRO
             pass
@@ -214,13 +211,17 @@ def thread_cycle():
             # DATOS TENTATIVOS QUE !!!DEBERÍAN!!! SERVIR
             # 2.221753 , 41.41319
             # 2.103144 , 41.41127
+            # DATOS TENTATIVOS QUE !!!DEBERÍAN!!! SERVIR
+            # 2.127196 , 41.32761
+            # 2.148804 , 41.37604
             localizacionOrigen = input("¿Cúal es la localización de origen?: ")
             localizacionDestino = input("¿Cúal es la localización de destino?: ")
-            distanciaMinimaOrigen,distanciaMinimaDestino,pesoMinimo,pathList = controller.requerimientoCuatro(control,localizacionOrigen,localizacionDestino)
-            for x in lt.iterator(pathList):
-                print(x)
-            print("="*20)
-            print(pesoMinimo)
+            distanciaMinimaOrigen,distanciaMinimaDestino,pesoMinimo,stack = controller.requerimientoCuatro(control,localizacionOrigen,localizacionDestino)
+            # totalTransbordos, totalDistance = model.intentoPrinteador(stack,control["model"]["DiGraph"])
+            print(f"Tienes que caminar {round(distanciaMinimaOrigen*1000,2)} metros para llegar a la primera estación")
+            print(model.printeadorReqCuatro(stack))
+            print(f"La destancia total recorrida en buses fue de: {pesoMinimo}")
+            print(f"Tienes que caminar desde la estación estación: {round(distanciaMinimaDestino*1000,2)} metros para llegar a tu destino")
 
         elif int(inputs) == 5:
                 # ESTOS NO LO HACEMOS PORQUE SOMOS SOLO 2
