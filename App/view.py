@@ -209,9 +209,6 @@ def thread_cycle():
 
         elif int(inputs) == 4:
             # DATOS TENTATIVOS QUE !!!DEBERÍAN!!! SERVIR
-            # 2.221753 , 41.41319
-            # 2.103144 , 41.41127
-            # DATOS TENTATIVOS QUE !!!DEBERÍAN!!! SERVIR
             # 2.127196 , 41.32761
             # 2.148804 , 41.37604
             localizacionOrigen = input("¿Cúal es la localización de origen?: ")
