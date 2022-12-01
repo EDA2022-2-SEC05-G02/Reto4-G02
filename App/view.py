@@ -199,6 +199,7 @@ def thread_cycle():
             estacionDestino = input("¿Cúal es la estación de destino?: ")
             totalStops, stack = controller.buscarCaminoOptimoEntreDosEstaciones(control,estacionOrigen,estacionDestino)
                 #! ESTO ESTA MAL, AUN NO ME DA XD
+            totalTransbordos,totalDistance=model.intentoPrinteador(stack,control["model"]["DiGraph"])
             resp1 = ("El total de estaciones que contiene el camino solución es (Sin contar Transbordos): "+str(totalStops-totalTransbordos))
             resp2 = ("El total de transbordos de ruta que debe realizar el usuario es: "+str(totalTransbordos))
             resp0 = ("La distancia total que toma el camino entre la estación origen y la estación destino es: "+str(round(totalDistance,2))+"Km")
@@ -214,7 +215,6 @@ def thread_cycle():
             localizacionOrigen = input("¿Cúal es la localización de origen?: ")
             localizacionDestino = input("¿Cúal es la localización de destino?: ")
             distanciaMinimaOrigen,distanciaMinimaDestino,pesoMinimo,stack = controller.requerimientoCuatro(control,localizacionOrigen,localizacionDestino)
-            # totalTransbordos, totalDistance = model.intentoPrinteador(stack,control["model"]["DiGraph"])
             print(f"Tienes que caminar {round(distanciaMinimaOrigen*1000,2)} metros para llegar a la primera estación")
             print(model.printeadorReqCuatro(stack))
             print(f"La destancia total recorrida en buses fue de: {pesoMinimo}")
