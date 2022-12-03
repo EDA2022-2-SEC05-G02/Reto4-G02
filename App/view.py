@@ -231,6 +231,9 @@ def thread_cycle():
             pass
 
         elif int(inputs) == 6:
+            # DATOS TENTATIVOS QUE !!!DEBERÍAN!!! SERVIR
+            # 0036-109
+            # Sant Andreu
             estacionOrigen = input("¿Cúal es el identificador de la estación origen? (Code-IdBus): ")
             neighborhoodDestino = input("¿Cúal es el identificador del vecindario: ")
             pesoMinimo,stack = controller.requerimientoSix(control,estacionOrigen,neighborhoodDestino)
