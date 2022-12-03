@@ -74,7 +74,7 @@ def newAnalyzer():
                 "graph": None,
                 "id->Coordenadas HASH": None,
                 "id->District_Name HASH":None,
-                "id->Neighborhood_Name HASH":None,
+                "hashPerNeighborhood":None,
                 "Arcos LIST": None,
                 "Vertices LIST": None,
                 "Totales HASH": None,
@@ -92,7 +92,7 @@ def newAnalyzer():
     #Tiene el número de elementos preciso, es decir, el número primo más cercano al producto del total de bustops x 4
     analyzer["id->Coordenadas HASH"] = mp.newMap(numelements=18593, maptype='PROBING', loadfactor=0.5, comparefunction=compareMapID)
     analyzer["id->District_Name HASH"] = mp.newMap(numelements=18593, maptype='PROBING', loadfactor=0.5, comparefunction=compareMapID)
-    analyzer["id->Neighborhood_Name HASH"] = mp.newMap(numelements=18593, maptype='PROBING', loadfactor=0.5, comparefunction=compareMapID)
+    analyzer["hashPerNeighborhood"] = mp.newMap(numelements=18593, maptype='PROBING', loadfactor=0.5, comparefunction=compareMapID)
 
     analyzer["rutas LIST"] = lt.newList(cmpfunction=compareList)
     analyzer["listPerTransbordo"] = lt.newList(cmpfunction=compareList)
@@ -115,6 +115,17 @@ def addCoordenadasToHASH(stop, analyzer):
     id = stop["id"]
 
     mp.put(map, id, (latitude, longitude))
+
+def addNeighborhoodToHASH(stop, analyzer):
+    map = analyzer["hashPerNeighborhood"]
+    id = stop["id"]
+    neighborhood = stop["Neighborhood_Name"]
+    if not(mp.contains(map,neighborhood)):
+        listita= lt.newList(cmpfunction=compareList)
+        mp.put(map,neighborhood,listita)
+    listaBarrios = getValueFast(map, neighborhood)
+    if not(lt.isPresent(listaBarrios,id)):
+        lt.addLast(listaBarrios,id)
 
 def addVertexToGraph(stop, graph, analyzer):
     id = stop["id"]
@@ -369,6 +380,24 @@ def estacionMasCercana (hashMap,location):
 #! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 5]  =^..^=    =^..^=    =^..^=    =^..^=
 
 #! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 6]  =^..^=    =^..^=    =^..^=    =^..^=
+def requerimientoSix(analyzer,estacionOrigen,neighborhoodDestino):
+    map = analyzer["hashPerNeighborhood"]
+    graph = analyzer["DiGraph"]
+    listOfPossibleEndStations = getValueFast(map,neighborhoodDestino)
+
+    paths = dj.Dijkstra(graph,estacionOrigen)
+    rbtStacksPerWeight = om.newMap("RBT",compareList)
+    for endStation in lt.iterator(listOfPossibleEndStations):
+        if dj.hasPathTo(paths, endStation):
+            stack = dj.pathTo(paths, endStation)
+            weightAllPath = dj.distTo(paths,endStation)
+            if not(mp.contains(rbtStacksPerWeight,weightAllPath)):
+                mp.put(rbtStacksPerWeight,weightAllPath,stack)
+    pesoMinimo = om.minKey(rbtStacksPerWeight)
+    llaveValor = om.get(rbtStacksPerWeight,pesoMinimo)
+    stackMenor = me.getValue(llaveValor)
+
+    return pesoMinimo,stackMenor
 
 #! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 7]  =^..^=    =^..^=    =^..^=    =^..^=
 

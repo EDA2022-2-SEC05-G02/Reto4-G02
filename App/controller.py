@@ -64,6 +64,7 @@ def loadData(control, suffix):
         reformStop(stop, analyzer)
     
         model.addCoordenadasToHASH(stop, analyzer)
+        model.addNeighborhoodToHASH(stop, analyzer)
         model.addVertexToGraph(stop, "DiGraph", analyzer)
         model.addVertexToGraph(stop, "graph", analyzer)
         # FUNCION PONER EDGES DE STOP A TRANSBORDO
@@ -184,6 +185,10 @@ def requerimientoCuatro(control,localizacionOrigen,localizacionDestino):
     return model.requerimientoCuatro(analyzer,localizacionOrigen,localizacionDestino)
 
 #! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 5]  =^..^=    =^..^=    =^..^=    =^..^=
+
+def requerimientoSix(control,estacionOrigen,neighborhoodDestino):
+    analyzer = control["model"]
+    return model.requerimientoSix(analyzer,estacionOrigen,neighborhoodDestino)
 
 
 #! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 6]  =^..^=    =^..^=    =^..^=    =^..^=
