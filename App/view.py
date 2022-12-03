@@ -215,7 +215,7 @@ def thread_cycle():
         elif int(inputs) == 4:
             # DATOS TENTATIVOS QUE !!!DEBERÍAN!!! SERVIR
             # 2.127196 , 41.32761
-            # 2.148804 , 41.37604
+            # 2.148806 , 41.37604
             localizacionOrigen = input("¿Cúal es la localización de origen?: ")
             localizacionDestino = input("¿Cúal es la localización de destino?: ")
             distanciaMinimaOrigen,distanciaMinimaDestino,pesoMinimo,stack = controller.requerimientoCuatro(control,localizacionOrigen,localizacionDestino)
