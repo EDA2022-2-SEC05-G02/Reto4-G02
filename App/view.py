@@ -205,8 +205,12 @@ def thread_cycle():
             resp0 = ("La distancia total que toma el camino entre la estación origen y la estación destino es: "+str(round(totalDistance,2))+"Km")
             printeador(resp0,resp1,resp2)
         elif int(inputs) == 3:
-                #NO HAY ENTRADAS POR PARÁMETRO
-            pass
+            totalScc, table = controller.reconocerComponentesConectados(control)
+            msg1 = f"Reconocer los componentes conectados de la Red de rutas de bus"
+            msg2 = f"Se reconocieron '{totalScc}' componentes fuertemente conectados en la red de rutas de Barcelona" 
+            printHeader(1, msg1, msg2)
+            print("Los 5 componentes conectados más grandes (de mayor a menor número de estaciones) son:\n ")
+            print(table)
 
         elif int(inputs) == 4:
             # DATOS TENTATIVOS QUE !!!DEBERÍAN!!! SERVIR

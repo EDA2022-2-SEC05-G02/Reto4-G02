@@ -168,7 +168,10 @@ def distancias(control,pathList):
     return model.distancias(analyzer,pathList)
 #! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 3]  =^..^=    =^..^=    =^..^=    =^..^=
 
-        # NO SE HACE PORQUE SOLO SOMOS DOS
+def reconocerComponentesConectados(control):
+    analyzer = control["model"]
+    totalScc, table = model.reconocerComponentesConectados(analyzer)
+    return totalScc, table
 
 #! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 4]  =^..^=    =^..^=    =^..^=    =^..^=
 

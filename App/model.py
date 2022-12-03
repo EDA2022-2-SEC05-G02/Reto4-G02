@@ -49,6 +49,7 @@ from prettytable import PrettyTable as ptbl
 from DISClib.Algorithms.Graphs import dfs
 from DISClib.Algorithms.Graphs import bfs
 from DISClib.Algorithms.Graphs import dijsktra as dj
+from DISClib.Algorithms.Graphs import scc 
 
 
 #para intalar harvesine ejecutar en consola:               pip install haversine
@@ -297,6 +298,17 @@ def distancias(analyzer,pathList):
 
 #! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 3]  =^..^=    =^..^=    =^..^=    =^..^=
 
+def reconocerComponentesConectados(analyzer):
+    graph = analyzer['DiGraph']
+    search = scc.KosarajuSCC(graph)
+    totalScc = scc.connectedComponents(search)
+    listOfScc = organizeScc(search, totalScc)
+
+    table = tableScc(listOfScc)
+    
+    return totalScc, table
+
+
 #! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 4]  =^..^=    =^..^=    =^..^=    =^..^=
 
 def requerimientoCuatro(analyzer,localizacionOrigen,localizacionDestino):
@@ -400,6 +412,15 @@ def cmpRutas(ruta1, ruta2):
     else:
         return True
 
+def cmpByListSize(list1, list2):
+    if (lt.size(list1) == lt.size(list2)):
+        return True
+    elif (lt.size(list1) < lt.size(list2)):
+        return False
+    else:
+        return True
+
+
 # Funciones de ordenamiento
     
 
@@ -478,6 +499,69 @@ def printkeys(analyzer):
     for k in lt.iterator(keys):
         print(k)
 
+
+def organizeScc(search, totalScc):
+    #Crea una lista de listas organizada para poder sacar del hash lo que sirve
+    hash = search['idscc']
+    keys = mp.keySet(hash)
+    output= lt.newList(cmpfunction = compareList)
+
+    for i in range(0, totalScc):
+        newList = lt.newList(cmpfunction=compareList)
+        lt.addLast(output, newList)
+
+    for stop in lt.iterator(keys):
+        pos = getValueFast(hash, stop)
+        list = lt.getElement(output, pos)
+        lt.addLast(list, stop)
+
+    for scc in lt.iterator(output):
+        ms.sort(scc, cmpRutas)
+    
+    ms.sort(output, cmpByListSize)
+
+    return output
+
+def tableScc(listOfScc):
+    table = ptbl()
+    table.field_names = ["Número de estaciones", "Estaciones (tres primeras y tres últimas)"]
+    table.align["Estaciones (tres primeras y tres últimas)"] = "l"
+
+
+    i = 1
+    while i <= 5:
+        scc = lt.getElement(listOfScc, i)
+        row = []
+        numStops = lt.size(scc)
+        row.append(numStops)
+        stopsScc = printStopsScc(scc)
+        row.append(stopsScc)
+        table.add_row(row)
+        table.hrules = True
+        i+=1
+
+    return table
+
+
+def printStopsScc(scc):
+    if lt.size(scc) <= 6:
+        output = ""
+        for stop in lt.iterator(scc):
+            output = output + f" - {stop}\n"
+    else:
+        output = ""
+        
+        for i in range(1, 4):
+            stop = lt.getElement(scc, i)
+            output = output + f" - {stop}\n"
+
+        output = output + "...\n"
+
+        for j in range(0, 3):
+            stop = lt.getElement(scc, lt.size(scc) - j)
+            output = output + f" - {stop}\n"
+
+    return output
 
 #PARA IMPRIMIR TABLAS Y COSAS
 
