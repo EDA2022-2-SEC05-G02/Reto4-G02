@@ -219,13 +219,16 @@ def intentoPrinteador(stackDado, graph):
 
 def printeadorReqCuatro(stackDado):
     textote = ""
+    transbordo = 0
     while not(st.isEmpty(stackDado)):
         stop = st.pop(stackDado)
         verticeA = stop["vertexA"]
         verticeB = stop["vertexB"]
+        if verticeB[0]=="T":
+            transbordo+=1
         peso = stop["weight"]
         textote += f"para ir de {verticeA} --> {verticeB} necesitas recorrer {round(peso,2)}KM \n"
-    return textote
+    return textote,transbordo
 #! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 1]  =^..^=    =^..^=    =^..^=    =^..^=
 
 def buscarCaminoPosibleEntreDosEstaciones(graph, startStop, endStop):

@@ -220,9 +220,11 @@ def thread_cycle():
             localizacionDestino = input("¿Cúal es la localización de destino?: ")
             distanciaMinimaOrigen,distanciaMinimaDestino,pesoMinimo,stack = controller.requerimientoCuatro(control,localizacionOrigen,localizacionDestino)
             print(f"Tienes que caminar {round(distanciaMinimaOrigen*1000,2)} metros para llegar a la primera estación")
-            print(model.printeadorReqCuatro(stack))
-            print(f"La destancia total recorrida en buses fue de: {pesoMinimo}")
+            texto,transbordo = (model.printeadorReqCuatro(stack))
+            print(texto)
+            print(f"La destancia total recorrida en buses fue de: {pesoMinimo}Km")
             print(f"Tienes que caminar desde la estación estación: {round(distanciaMinimaDestino*1000,2)} metros para llegar a tu destino")
+            print(f"La cantidad de transbordos realizados fue de: {transbordo}")
 
         elif int(inputs) == 5:
                 # ESTOS NO LO HACEMOS PORQUE SOMOS SOLO 2
@@ -237,8 +239,11 @@ def thread_cycle():
             estacionOrigen = input("¿Cúal es el identificador de la estación origen? (Code-IdBus): ")
             neighborhoodDestino = input("¿Cúal es el identificador del vecindario: ")
             pesoMinimo,stack = controller.requerimientoSix(control,estacionOrigen,neighborhoodDestino)
-            print(pesoMinimo)
-            print(stack)
+            texto,transbordo=(model.printeadorReqCuatro(stack))
+            print(texto)
+            print(f"¡Has llegado al barrio {neighborhoodDestino}!")
+            print(f"La cantidad de transbordos realizados fue de: {transbordo}")
+            print(f"La destancia total recorrida en buses fue de: {round(pesoMinimo,2)}Km")
             pass
 
         elif int(inputs) == 7:
