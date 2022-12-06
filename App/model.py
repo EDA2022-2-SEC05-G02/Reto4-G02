@@ -50,6 +50,7 @@ from DISClib.Algorithms.Graphs import dfs
 from DISClib.Algorithms.Graphs import bfs
 from DISClib.Algorithms.Graphs import dijsktra as dj
 from DISClib.Algorithms.Graphs import scc 
+from DISClib.Algorithms.Graphs import cycles as cy 
 
 
 #para intalar harvesine ejecutar en consola:               pip install haversine
@@ -403,6 +404,10 @@ def requerimientoSix(analyzer,estacionOrigen,neighborhoodDestino):
     return pesoMinimo,stackMenor
 
 #! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 7]  =^..^=    =^..^=    =^..^=    =^..^=
+
+def findCirclePath(origin, analyzer):
+    diGraph = analyzer['DiGraph']
+    
 
 #! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 8]  =^..^=    =^..^=    =^..^=    =^..^=
 

@@ -247,8 +247,10 @@ def thread_cycle():
             pass
 
         elif int(inputs) == 7:
-            estacionOrigen = input("¿Cúal es el identificador de la estación origen? (Code-IdBus): ")
-            pass
+            # T-1011
+            origin = input("¿Cúal es el identificador de la estación origen? (Code-IdBus): ")
+            controller.findCirclePath(origin, control)
+            
 
         elif int(inputs) == 8:
             controller.printkeys(control)

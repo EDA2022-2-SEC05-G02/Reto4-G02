@@ -195,6 +195,9 @@ def requerimientoSix(control,estacionOrigen,neighborhoodDestino):
 
 
 #! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 7]  =^..^=    =^..^=    =^..^=    =^..^=
+def findCirclePath(origin, control):
+    analyzer = control['model']
+    return model.findCirclePath(origin, analyzer)
 
 
 #! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 8]  =^..^=    =^..^=    =^..^=    =^..^=
