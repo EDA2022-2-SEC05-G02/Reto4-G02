@@ -205,11 +205,11 @@ def thread_cycle():
                 totalDistance, totalStops, totalTransbordos, path = respuesta
                 msg1=f"Búsqueda de un camino posible entre las estaciones '{estacionOrigen}' y '{estacionDestino}'. "
                 msg2=f"Existe camino entre las estaciones '{estacionOrigen}' y '{estacionDestino}'.\n-> DISTANCIA TOTAL RECORRIDA: '{totalDistance}' Km\n-> TOTAL ESTACIONES EN EL CAMINO: '{totalStops}'\n-> TOTAL TRANSBORDOS: '{totalTransbordos}'"
-                printHeader(1, msg1, msg2)
                 for stop in lt.iterator(path):
                     print(">>> " + stop)
                     if not(stop[11:] == "Destino"):
                         print(":")
+                printHeader(1, msg1, msg2)
 
         elif int(inputs) == 2:
                 #!  DATOS TENTATIVOS QUE SIRVEN
@@ -257,10 +257,11 @@ def thread_cycle():
             # Sant Andreu
             estacionOrigen = input("¿Cúal es el identificador de la estación origen? (Code-IdBus): ")
             neighborhoodDestino = input("¿Cúal es el identificador del vecindario: ")
-            pesoMinimo,stack = controller.requerimientoSix(control,estacionOrigen,neighborhoodDestino)
-            texto,transbordo=(model.printeadorReqCuatro(stack,control["model"],True))
+            pesoMinimo,stack,size = controller.requerimientoSix(control,estacionOrigen,neighborhoodDestino)
+            texto,transbordo=(model.printeadorReqCuatro(stack,control["model"]))
             print(texto)
             print(f"¡Has llegado al barrio {neighborhoodDestino}!")
+            print(f"La cantidad de estaciones (sin contar transbordos) fue de: {size-transbordo}")
             print(f"La cantidad de transbordos realizados fue de: {transbordo}")
             print(f"La destancia total recorrida en buses fue de: {round(pesoMinimo,2)}Km")
 

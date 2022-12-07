@@ -289,8 +289,8 @@ def intentoPrinteador(stackDado, graph, req7=None):
         print(f"Hemos llegado a {req7}, volvimos a donde empezamos, ¡Es una ruta circular!")
     return totalTransbordos,totalDistance
 
-def printeadorReqCuatro(stackDado, analyzer=None,condicion=False):
-    if analyzer!="None":
+def printeadorReqCuatro(stackDado, analyzer=None):
+    if analyzer!=None:
         map = analyzer["neighborgoodByCodeStation"]
     textote = ""
     transbordo = 0
@@ -302,7 +302,7 @@ def printeadorReqCuatro(stackDado, analyzer=None,condicion=False):
             transbordo+=1
         peso = stop["weight"]
         textote += f"para ir de {verticeA} --> {verticeB} necesitas recorrer {round(peso,2)}KM"
-        if condicion!=None:
+        if analyzer!=None:
             busStationB = verticeB.split("-")
             if verticeB[0]=="T":
                 busStationB = busStationB[1]
@@ -482,8 +482,9 @@ def requerimientoSix(analyzer,estacionOrigen,neighborhoodDestino):
     pesoMinimo = om.minKey(rbtStacksPerWeight)
     llaveValor = om.get(rbtStacksPerWeight,pesoMinimo)
     stackMenor = me.getValue(llaveValor)
+    size = st.size(stackMenor)
 
-    return pesoMinimo,stackMenor
+    return pesoMinimo,stackMenor,size
 
 #! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 7]  =^..^=    =^..^=    =^..^=    =^..^=
 
