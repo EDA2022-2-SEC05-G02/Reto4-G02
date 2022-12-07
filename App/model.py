@@ -193,7 +193,7 @@ def intentoPrinteador(stackDado, graph):
         if stop[0] == "T":
             totalTransbordos += 1
             nextStop = st.top(stackDado)
-            stop = stop + f"   -- Realiza transbordo a la ruta ({nextStop})"
+            stop = stop + f" -- Realiza transbordo a la ruta ({nextStop})"
             lt.addLast(path, stop)
 
         elif st.size(stackDado) > 0:
@@ -215,9 +215,7 @@ def intentoPrinteador(stackDado, graph):
 
     for stop in lt.iterator(path):
         print(">>> " + stop)
-        if not(stop[11:] == "Destino"):
-            print(":")
-        else:
+        if (stop[11:] == "Destino"):
             print("\n")
     return totalTransbordos,totalDistance
 
@@ -286,9 +284,9 @@ def buscarCaminoOptimoEntreDosEstaciones(analyzer, startStop, endStop):
     if bfs.hasPathTo(search, endStop):
         stack = bfs.pathTo(search, endStop)
         totalStops = st.size(stack)
+        return totalStops, stack
     else:
         print("No hay nada")
-    return totalStops, stack
 
 def distancias(analyzer,pathList):
     hashMap = analyzer["id->Coordenadas HASH"]
@@ -415,18 +413,24 @@ def findCirclePath(origin, analyzer):
         for adyacente in lt.iterator((gr.adjacents(diGraph,vertice))):
             if adyacente == origin:
                 lt.addLast(listaLlegan,vertice)    
+    rbtStacksPerWeight = om.newMap("RBT",compareList)
     search = dfs.DepthFirstSearch(diGraph, origin)
     for destino in lt.iterator(listaLlegan):
         stack = dfs.pathTo(search,destino)
         size = (st.size(stack))
         if size>2:
-            respuesta = stack
+            if not(mp.contains(rbtStacksPerWeight,size)):
+                mp.put(rbtStacksPerWeight,size,stack)
+    caminosMinimos = om.minKey(rbtStacksPerWeight)
+    llaveValor = om.get(rbtStacksPerWeight,caminosMinimos)
+    stackMenor = me.getValue(llaveValor)
+    return caminosMinimos, stackMenor
 
 #! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 8]  =^..^=    =^..^=    =^..^=    =^..^=
 
 
 
-# Funciones utilizadas para comparar elementos 
+#! =^..^=   =^..^=   =^..^=    =^..^=  [Funciones utilizadas para comparar elementos]  =^..^=    =^..^=    =^..^=    =^..^=
 
 def compareStopIds(stop, keyvaluestop):
     stopcode = keyvaluestop['key']

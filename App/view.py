@@ -158,15 +158,9 @@ def thread_cycle():
             respuesta = controller.mostrarCarga(control)
             print("\nEl total de rutas de bus disponibles es: " + str(totalRutas))
             print(respuesta)
-            # print("TOTAL VERTICES MAP:" + str(gr.numVertices(control["model"]["DiGraph"])))
             print(f"El rango del área rectangular de Barcelona que cubre la red de buses es: '{round(area, 4)}' Km^2\nLongitud Mínima: {round(longMin, 4)}\nLongitud Máxima: {round(longMax, 4)}\nLatitud Mínima: {round(latMin, 4)}\nLatitud Máxima: {round(latMax, 4)}\n")
             print("Las primeras cinco y últimas cinco estaciones registradas en el grafo son las siguientes: ")
             print(table)
-            # for x in lt.iterator(control["model"]["listPerTransbordo"]):
-            #     print(x)
-            # print("="*20)
-            # for x in lt.iterator(control["model"]["listPerNOTTransbordo"]):
-            #     print(x)
 
 
         elif int(inputs) == 1:
@@ -188,8 +182,6 @@ def thread_cycle():
                     print(">>> " + stop)
                     if not(stop[11:] == "Destino"):
                         print(":")
-            # model.printVerteces("DiGraph", control["model"])
-            # model.printEdges("DiGraph", control["model"])
 
         elif int(inputs) == 2:
                 #!  DATOS TENTATIVOS QUE SIRVEN
@@ -230,7 +222,6 @@ def thread_cycle():
                 # ESTOS NO LO HACEMOS PORQUE SOMOS SOLO 2
             estacionOrigen = input("¿Cúal es el identificador de la estación origen? (Code-IdBus): ")
             numeroConexiones = int(input("¿Cúal es el número de conexiones permitidas?: "))
-            pass
 
         elif int(inputs) == 6:
             # DATOS TENTATIVOS QUE !!!DEBERÍAN!!! SERVIR
@@ -239,17 +230,25 @@ def thread_cycle():
             estacionOrigen = input("¿Cúal es el identificador de la estación origen? (Code-IdBus): ")
             neighborhoodDestino = input("¿Cúal es el identificador del vecindario: ")
             pesoMinimo,stack = controller.requerimientoSix(control,estacionOrigen,neighborhoodDestino)
+            #!              --- ME FALTA PRINTEARLO BONITO ---
             texto,transbordo=(model.printeadorReqCuatro(stack))
             print(texto)
             print(f"¡Has llegado al barrio {neighborhoodDestino}!")
             print(f"La cantidad de transbordos realizados fue de: {transbordo}")
             print(f"La destancia total recorrida en buses fue de: {round(pesoMinimo,2)}Km")
-            pass
 
         elif int(inputs) == 7:
+            # DATOS TENTATIVOS QUE !!!DEBERÍAN!!! SERVIR
             # T-1011
+            # T-1337
             origin = input("¿Cúal es el identificador de la estación origen? (Code-IdBus): ")
-            print(controller.findCirclePath(origin, control))
+            totalStops, stack = (controller.findCirclePath(origin, control))
+            #!              --- ME FALTA QUE PRINTEE LA ULTIMA PARADA (LA DE LLEGADA) ---
+            totalTransbordos,totalDistance=model.intentoPrinteador(stack,control["model"]["DiGraph"])
+            resp1 = ("El total de estaciones que contiene el camino solución es (Sin contar Transbordos): "+str(totalStops-totalTransbordos))
+            resp2 = ("El total de transbordos de ruta que debe realizar el usuario es: "+str(totalTransbordos))
+            resp0 = ("La distancia total que toma el camino entre la estación origen y la estación destino es: "+str(round(totalDistance,2))+"Km")
+            printeador(resp0,resp1,resp2)
             
 
         elif int(inputs) == 8:
