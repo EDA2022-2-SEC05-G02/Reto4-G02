@@ -133,3 +133,28 @@ def pathTo(search, vertex):
         return path
     except Exception as exp:
         error.reraise(exp, 'dfs:pathto')
+
+def pathToReqSeven(search, vertex):
+    """
+    Retorna el camino entre el vertices source y el
+    vertice vertex
+    Args:
+        search: La estructura con el recorrido
+        vertex: Vertice de destingo
+    Returns:
+        Una pila con el camino entre el vertices source y el
+        vertice vertex
+    Raises:
+        Exception
+    """
+    try:
+        if hasPathTo(search, vertex) is False:
+            return None
+        path = stk.newStack()
+        while (vertex != search['source']) and ():
+            stk.push(path, vertex)
+            vertex = map.get(search['visited'], vertex)['value']['edgeTo']
+        stk.push(path, search['source'])
+        return path
+    except Exception as exp:
+        error.reraise(exp, 'dfs:pathto')

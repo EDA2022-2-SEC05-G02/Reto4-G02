@@ -410,7 +410,17 @@ def requerimientoSix(analyzer,estacionOrigen,neighborhoodDestino):
 
 def findCirclePath(origin, analyzer):
     diGraph = analyzer['DiGraph']
-    
+    listaLlegan = lt.newList("SINGLE_LINKED")
+    for vertice in lt.iterator(gr.vertices(diGraph)):
+        for adyacente in lt.iterator((gr.adjacents(diGraph,vertice))):
+            if adyacente == origin:
+                lt.addLast(listaLlegan,vertice)    
+    search = dfs.DepthFirstSearch(diGraph, origin)
+    for destino in lt.iterator(listaLlegan):
+        stack = dfs.pathTo(search,destino)
+        size = (st.size(stack))
+        if size>2:
+            respuesta = stack
 
 #! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 8]  =^..^=    =^..^=    =^..^=    =^..^=
 
