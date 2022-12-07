@@ -242,7 +242,7 @@ def thread_cycle():
             print(f"Tienes que caminar {round(distanciaMinimaOrigen*1000,2)} metros para llegar a la primera estación")
             texto,transbordo = (model.printeadorReqCuatro(stack))
             print(texto)
-            print(f"La destancia total recorrida en buses fue de: {pesoMinimo}Km")
+            print(f"La destancia total recorrida en buses fue de: {round(pesoMinimo,2)}Km")
             print(f"Tienes que caminar desde la estación estación: {round(distanciaMinimaDestino*1000,2)} metros para llegar a tu destino")
             print(f"La cantidad de transbordos realizados fue de: {transbordo}")
 
@@ -258,8 +258,7 @@ def thread_cycle():
             estacionOrigen = input("¿Cúal es el identificador de la estación origen? (Code-IdBus): ")
             neighborhoodDestino = input("¿Cúal es el identificador del vecindario: ")
             pesoMinimo,stack = controller.requerimientoSix(control,estacionOrigen,neighborhoodDestino)
-            #!              --- ME FALTA PRINTEARLO BONITO ---
-            texto,transbordo=(model.printeadorReqCuatro(stack))
+            texto,transbordo=(model.printeadorReqCuatro(stack,control["model"]))
             print(texto)
             print(f"¡Has llegado al barrio {neighborhoodDestino}!")
             print(f"La cantidad de transbordos realizados fue de: {transbordo}")

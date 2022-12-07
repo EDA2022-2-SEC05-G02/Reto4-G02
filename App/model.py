@@ -76,6 +76,7 @@ def newAnalyzer():
                 "id->Coordenadas HASH": None,
                 "id->District_Name HASH":None,
                 "id->Neighborhood_Name HASH":None,
+                "neighborgoodByCodeStation":None,
                 "hashPerNeighborhood":None,
                 "Arcos LIST": None,
                 "Vertices LIST": None,
@@ -96,6 +97,7 @@ def newAnalyzer():
     analyzer["id->District_Name HASH"] = mp.newMap(numelements=18593, maptype='PROBING', loadfactor=0.5, comparefunction=compareMapID)
     analyzer["hashPerNeighborhood"] = mp.newMap(numelements=18593, maptype='PROBING', loadfactor=0.5, comparefunction=compareMapID)
     analyzer["id->Neighborhood_Name HASH"] = mp.newMap(numelements=18593, maptype='PROBING', loadfactor=0.5, comparefunction=compareMapID)
+    analyzer["neighborgoodByCodeStation"] = mp.newMap(numelements=18593, maptype='PROBING', loadfactor=0.5, comparefunction=compareMapID)
 
     analyzer["rutas LIST"] = lt.newList(cmpfunction=compareList)
     analyzer["listPerTransbordo"] = lt.newList(cmpfunction=compareList)
@@ -138,10 +140,15 @@ def addDistrictToHASH(stop, analyzer):
 
 def addNeighToHASH(stop, analyzer):
     map = analyzer["id->Neighborhood_Name HASH"]
+    map2 = analyzer["neighborgoodByCodeStation"]
     neigh = stop["Neighborhood_Name"]
     id = stop["id"]
+    stationCode = (stop["id"].split("-"))
+    stationCode = stationCode[0]
 
     mp.put(map, id, neigh)
+    if not(mp.contains(map2,stationCode)):
+        mp.put(map2, stationCode, neigh)
 
     if stop["Transbordo"] == "S":
 
@@ -250,7 +257,9 @@ def intentoPrinteador(stackDado, graph):
             print("\n")
     return totalTransbordos,totalDistance
 
-def printeadorReqCuatro(stackDado):
+def printeadorReqCuatro(stackDado, analyzer=None,condicion=False):
+    if analyzer!="None":
+        map = analyzer["neighborgoodByCodeStation"]
     textote = ""
     transbordo = 0
     while not(st.isEmpty(stackDado)):
@@ -260,7 +269,16 @@ def printeadorReqCuatro(stackDado):
         if verticeB[0]=="T":
             transbordo+=1
         peso = stop["weight"]
-        textote += f"para ir de {verticeA} --> {verticeB} necesitas recorrer {round(peso,2)}KM \n"
+        textote += f"para ir de {verticeA} --> {verticeB} necesitas recorrer {round(peso,2)}KM"
+        if condicion!=None:
+            busStationB = verticeB.split("-")
+            if verticeB[0]=="T":
+                busStationB = busStationB[1]
+            else:
+                busStationB = busStationB[0]
+            barrio = getValueFast(map,busStationB)
+            textote += f", Has llegado al barrio: {barrio}"
+        textote+="\n"
     return textote,transbordo
 #! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 1]  =^..^=    =^..^=    =^..^=    =^..^=
 
