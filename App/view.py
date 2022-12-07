@@ -258,7 +258,7 @@ def thread_cycle():
             estacionOrigen = input("¿Cúal es el identificador de la estación origen? (Code-IdBus): ")
             neighborhoodDestino = input("¿Cúal es el identificador del vecindario: ")
             pesoMinimo,stack = controller.requerimientoSix(control,estacionOrigen,neighborhoodDestino)
-            texto,transbordo=(model.printeadorReqCuatro(stack,control["model"]))
+            texto,transbordo=(model.printeadorReqCuatro(stack,control["model"],True))
             print(texto)
             print(f"¡Has llegado al barrio {neighborhoodDestino}!")
             print(f"La cantidad de transbordos realizados fue de: {transbordo}")
@@ -271,7 +271,7 @@ def thread_cycle():
             origin = input("¿Cúal es el identificador de la estación origen? (Code-IdBus): ")
             totalStops, stack = (controller.findCirclePath(origin, control))
             #!              --- ME FALTA QUE PRINTEE LA ULTIMA PARADA (LA DE LLEGADA) ---
-            totalTransbordos,totalDistance=model.intentoPrinteador(stack,control["model"]["DiGraph"])
+            totalTransbordos,totalDistance=model.intentoPrinteador(stack,control["model"]["DiGraph"],origin)
             resp1 = ("El total de estaciones que contiene el camino solución es (Sin contar Transbordos): "+str(totalStops-totalTransbordos))
             resp2 = ("El total de transbordos de ruta que debe realizar el usuario es: "+str(totalTransbordos))
             resp0 = ("La distancia total que toma el camino entre la estación origen y la estación destino es: "+str(round(totalDistance,2))+"Km")

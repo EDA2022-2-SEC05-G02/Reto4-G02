@@ -222,39 +222,71 @@ def addCoord(coor, map):
 
 #! =^..^=   =^..^=   =^..^=    =^..^=  [FUNCIÓN DE IMPRESIÓN (creo)]  =^..^=    =^..^=    =^..^=    =^..^=
 
-def intentoPrinteador(stackDado, graph):
+def intentoPrinteador(stackDado, graph, req7=None):
     totalTransbordos = 0
     path = lt.newList(cmpfunction=compareList)
     totalDistance = 0
     while not(st.isEmpty(stackDado)):
         stop = st.pop(stackDado)
-        if stop[0] == "T":
-            totalTransbordos += 1
-            nextStop = st.top(stackDado)
-            stop = stop + f" -- Realiza transbordo a la ruta ({nextStop})"
-            lt.addLast(path, stop)
-
-        elif st.size(stackDado) > 0:
-            nextStop = st.top(stackDado)
-            if nextStop[0] == "T":
-                stop = stop + f" !! Parada en estación de transbordo ({nextStop})"
+        if req7==None:
+            if stop[0] == "T":
+                totalTransbordos += 1
+                nextStop = st.top(stackDado)
+                stop = stop + f" -- Realiza transbordo a la ruta ({nextStop})"
                 lt.addLast(path, stop)
+
+            elif st.size(stackDado) > 0:
+                nextStop = st.top(stackDado)
+                if nextStop[0] == "T":
+                    stop = stop + f" !! Parada en estación de transbordo ({nextStop})"
+                    lt.addLast(path, stop)
+
+                else:
+                    edge = gr.getEdge(graph, stop, nextStop)
+                    distance = edge['weight']
+                    totalDistance += distance
+                    stop = stop + f" -> Distancia a la siguiente parada ({nextStop}): {round(distance, 2)} Km"
+                    lt.addLast(path, stop)
 
             else:
-                edge = gr.getEdge(graph, stop, nextStop)
-                distance = edge['weight']
-                totalDistance += distance
-                stop = stop + f" -> Distancia a la siguiente parada ({nextStop}) : {round(distance, 2)} Km"
+                stop = stop + " < Destino"
+                lt.addLast(path, stop)
+        else:
+            if stop[0] == "T":
+                totalTransbordos += 1
+                nextStop = st.top(stackDado)
+                stop = stop + f" -- Realiza transbordo a la ruta ({nextStop})"
                 lt.addLast(path, stop)
 
-        else:
-            stop = stop + " < Destino"
-            lt.addLast(path, stop)
+            elif st.size(stackDado) > 0:
+                nextStop = st.top(stackDado)
+                if nextStop[0] == "T":
+                    stop = stop + f" !! Parada en estación de transbordo ({nextStop})"
+                    lt.addLast(path, stop)
 
+                else:
+                    edge = gr.getEdge(graph, stop, nextStop)
+                    distance = edge['weight']
+                    totalDistance += distance
+                    stop = stop + f" -> Distancia a la siguiente parada ({nextStop}): {round(distance, 2)} Km"
+                    lt.addLast(path, stop)
+
+            else:
+                edge = gr.getEdge(graph, stop, req7)
+                distance = edge['weight']
+                totalDistance += distance
+                if req7[0] == "T":
+                    stop = stop + f" !! Parada en estación de transbordo ({req7})"
+                    lt.addLast(path, stop)
+                else:
+                    stop = stop + f" -> Distancia a la siguiente parada ({req7}): {round(distance, 2)} Km"
+                    lt.addLast(path, stop)
     for stop in lt.iterator(path):
         print(">>> " + stop)
         if (stop[11:] == "Destino"):
             print("\n")
+    if req7!=None:
+        print(f"Hemos llegado a {req7}, volvimos a donde empezamos, ¡Es una ruta circular!")
     return totalTransbordos,totalDistance
 
 def printeadorReqCuatro(stackDado, analyzer=None,condicion=False):
