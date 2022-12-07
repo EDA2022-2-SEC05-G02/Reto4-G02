@@ -130,7 +130,8 @@ def addNeighborhoodToHASH(stop, analyzer):
 
 def addVertexToGraph(stop, graph, analyzer):
     id = stop["id"]
-    transbordo = "T-"+stop["id"][0:4]
+    coso = stop["id"].split("-")
+    transbordo = "T-"+coso[0]
     graph = analyzer[graph]
     if stop["Transbordo"]=="S":
         if not(gr.containsVertex(graph, transbordo)):
@@ -138,7 +139,8 @@ def addVertexToGraph(stop, graph, analyzer):
         if not(lt.isPresent(analyzer["listPerTransbordo"],transbordo)):
             lt.addLast(analyzer["listPerTransbordo"],transbordo)
     else:
-        idEstacion = stop["id"][0:4]
+        coso = stop["id"].split("-")
+        idEstacion = coso[0]
         if not(lt.isPresent(analyzer["listPerNOTTransbordo"],idEstacion)):
             lt.addLast(analyzer["listPerNOTTransbordo"],idEstacion)
 
@@ -160,7 +162,8 @@ def addEdgeToTransbordo (stop, graph, analyzer):
 
 def addEdgesToGraph(edge, graph, analyzer):
     graph = analyzer[graph]
-    bus = edge["Bus_Stop"][4:7]
+    coso = edge["Bus_Stop"].split("-")
+    bus =coso[1]
     vertexA = edge["Code"] + "-" + bus
     vertexB = edge["Code_Destiny"] + "-" + bus
     coorA = getValueFast(analyzer["id->Coordenadas HASH"], vertexA)

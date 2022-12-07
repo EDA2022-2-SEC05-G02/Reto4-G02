@@ -95,7 +95,7 @@ def reformStop(stop, analyzer):
     stop["Longitude"] = float(stop["Longitude"])
     stop["Latitude"] = float(stop["Latitude"])
 
-    ruta = stop["Bus_Stop"][6:]
+    ruta = stop["Bus_Stop"][4:]
     lt.addLast(analyzer["rutas LIST"], ruta)
 
     mapaLongitudes = analyzer["mapa de longitudes"]
@@ -112,8 +112,8 @@ def reformEdge(edge):
 
 def addId(stop):
     code = stop["Code"]
-    bus = stop["Bus_Stop"][6:9]
-
+    bus = stop["Bus_Stop"].split("-")
+    bus = bus[1]
     lenCode = len(code)
     missingCeros = "0"*(4-lenCode)
 
