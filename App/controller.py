@@ -27,6 +27,7 @@ import datetime
 import time
 from DISClib.ADT import list as lt
 from DISClib.ADT import graph as gr
+from DISClib.ADT import map as mp
 
 
 
@@ -57,22 +58,30 @@ def loadData(control, suffix):
     EdgesDataFile = cf.data_dir + "bus_edges_bcn-utf8" + suffix
     inputFileStops = csv.DictReader(open(StopsFile, encoding = 'utf-8'))
     inputFileEdgesData = csv.DictReader(open(EdgesDataFile, encoding= "utf-8"))
+    sizeStops = 0
+    sizeRoutes = 0
 
 
 
     for stop in inputFileStops:
+        sizeStops += 1
+
         reformStop(stop, analyzer)
     
         model.addCoordenadasToHASH(stop, analyzer)
         model.addNeighborhoodToHASH(stop, analyzer)
+        model.addDistrictToHASH(stop, control['model'])
+        model.addNeighToHASH(stop, control['model'])
         model.addVertexToGraph(stop, "DiGraph", analyzer)
         model.addVertexToGraph(stop, "graph", analyzer)
         # FUNCION PONER EDGES DE STOP A TRANSBORDO
         if stop["Transbordo"]=="S":
                 model.addEdgeToTransbordo(stop,"graph", analyzer)
                 model.addEdgeToTransbordo(stop,"DiGraph", analyzer)
+                
 
     for edge in inputFileEdgesData:
+        sizeRoutes +=1
         reformEdge(edge)
         model.addEdgesToGraph(edge, "DiGraph", analyzer)
         model.addEdgesToGraph(edge, "graph", analyzer)
@@ -80,13 +89,28 @@ def loadData(control, suffix):
             #ESTO ERA PARA CONFIRMAR SI HABÍAN REPETIDOS O NO JAJA
     # model.ordenarListasExperimento(analyzer)
 
+    totalBusStops, exclusiveBusStops, sharedBusStops, totalBusStopsRoutes, exclusiveBusStopsRoutes, sharedBusRoutes = model.countExclusive(control['model'], sizeRoutes)
+
     totalRutas = model.countRutas(analyzer)
 
     area, longMin, longMax,  latMin, latMax = model.rangoArea(analyzer)
 
     table = model.firstAndLast5(analyzer["graph"], analyzer)
 
-    return control, totalRutas, area, longMin, longMax,  latMin, latMax, table
+    nodes, edges = model.graphSpecs(control['model'], "DiGraph")
+
+    DiGraphNodes = nodes
+    DiGraphEdges = edges
+
+    nodes, edges = model.graphSpecs(control['model'], "graph")
+
+    graphNodes = nodes
+    graphEdges = edges
+
+    tableDiGraph = model.tableDiGraph(control['model'])
+    tableGraph = model.tableGraph(control["model"])
+
+    return control, totalRutas, area, longMin, longMax,  latMin, latMax, table, sizeStops , sizeRoutes, totalBusStops, exclusiveBusStops, sharedBusStops, totalBusStopsRoutes, exclusiveBusStopsRoutes, sharedBusRoutes, DiGraphEdges, DiGraphNodes, graphEdges, graphNodes, tableDiGraph, tableGraph
 
 # Funciones de ordenamiento
 

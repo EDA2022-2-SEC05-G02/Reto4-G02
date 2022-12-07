@@ -75,6 +75,7 @@ def newAnalyzer():
                 "graph": None,
                 "id->Coordenadas HASH": None,
                 "id->District_Name HASH":None,
+                "id->Neighborhood_Name HASH":None,
                 "hashPerNeighborhood":None,
                 "Arcos LIST": None,
                 "Vertices LIST": None,
@@ -94,6 +95,7 @@ def newAnalyzer():
     analyzer["id->Coordenadas HASH"] = mp.newMap(numelements=18593, maptype='PROBING', loadfactor=0.5, comparefunction=compareMapID)
     analyzer["id->District_Name HASH"] = mp.newMap(numelements=18593, maptype='PROBING', loadfactor=0.5, comparefunction=compareMapID)
     analyzer["hashPerNeighborhood"] = mp.newMap(numelements=18593, maptype='PROBING', loadfactor=0.5, comparefunction=compareMapID)
+    analyzer["id->Neighborhood_Name HASH"] = mp.newMap(numelements=18593, maptype='PROBING', loadfactor=0.5, comparefunction=compareMapID)
 
     analyzer["rutas LIST"] = lt.newList(cmpfunction=compareList)
     analyzer["listPerTransbordo"] = lt.newList(cmpfunction=compareList)
@@ -116,6 +118,35 @@ def addCoordenadasToHASH(stop, analyzer):
     id = stop["id"]
 
     mp.put(map, id, (latitude, longitude))
+
+    if stop["Transbordo"] == "S":
+
+        id = "T-"+ stop["Code"]
+        mp.put(map, id, (latitude, longitude))
+
+def addDistrictToHASH(stop, analyzer):
+    map = analyzer["id->District_Name HASH"]
+    district = stop["District_Name"]
+    id = stop["id"]
+
+    mp.put(map, id, district)
+
+    if stop["Transbordo"] == "S":
+
+        id = "T-"+ stop["Code"]
+        mp.put(map, id, district)
+
+def addNeighToHASH(stop, analyzer):
+    map = analyzer["id->Neighborhood_Name HASH"]
+    neigh = stop["Neighborhood_Name"]
+    id = stop["id"]
+
+    mp.put(map, id, neigh)
+
+    if stop["Transbordo"] == "S":
+
+        id = "T-"+ stop["Code"]
+        mp.put(map, id, neigh)
 
 def addNeighborhoodToHASH(stop, analyzer):
     map = analyzer["hashPerNeighborhood"]
@@ -619,6 +650,196 @@ def printStopsScc(scc):
 
 #PARA IMPRIMIR TABLAS Y COSAS
 
+def tableDiGraph(analyzer):
+    graph = analyzer["DiGraph"]
+    verteces = gr.vertices(graph)
+    ms.sort(verteces, cmpRutas)
+
+    table = ptbl()
+    table.field_names = ["Node_ID", "Code", "Bus_Stop", "Transport", "Longitude", "Latitude", "District_Name", "Neighborhood_Name", "In Degree (Routes)", "Out Degree (Routes)"]
+    listSize = lt.size(verteces)
+
+    i = 1
+    while i <= 5:
+
+        stop = lt.getElement(verteces, i)
+        row = []
+        row.append(stop)
+
+        if stop[0] == "T":
+            code = stop[2:]
+            busStop = "T-BUS"
+            transport = "Transfer bus"
+        else:
+            code = stop[0:5]
+            busStop = "BUS-" + stop[5:]
+            transport = "Day bus stop"
+
+        row.append(code)
+        row.append(busStop)
+        row.append(transport)
+
+        latitude, longitude = getValueFast(analyzer["id->Coordenadas HASH"], stop)
+        
+        row.append(longitude)
+        row.append(latitude)
+
+        disctrict = getValueFast(analyzer["id->District_Name HASH"], stop)
+        row.append(disctrict)   
+
+        neighbor = getValueFast(analyzer["id->Neighborhood_Name HASH"], stop) 
+        row.append(neighbor)
+
+        indegree = gr.indegree(graph, stop)
+        row.append(indegree)
+
+        outdegree = gr.outdegree(graph, stop)
+        row.append(outdegree)
+
+        table.add_row(row)
+        table.hrules = True
+
+        i +=1
+
+    j = listSize - 4
+    while j <= listSize:
+
+        stop = lt.getElement(verteces, j)
+
+        row = []
+        row.append(stop)
+
+        if stop[0] == "T":
+            code = stop[2:]
+            busStop = "T-BUS"
+            transport = "Transfer bus"
+        else:
+            code = stop[0:5]
+            busStop = "BUS-" + stop[5:]
+            transport = "Day bus stop"
+
+        row.append(code)
+        row.append(busStop)
+        row.append(transport)
+        print(stop)
+
+        latitude, longitude = getValueFast(analyzer["id->Coordenadas HASH"], stop)
+        
+        row.append(longitude)
+        row.append(latitude)
+
+        disctrict = getValueFast(analyzer["id->District_Name HASH"], stop)
+        row.append(disctrict)   
+
+        neighbor = getValueFast(analyzer["id->Neighborhood_Name HASH"], stop) 
+        row.append(neighbor)
+
+        indegree = gr.indegree(graph, stop)
+        row.append(indegree)
+
+        outdegree = gr.outdegree(graph, stop)
+        row.append(outdegree)
+
+        table.add_row(row)
+        table.hrules = True
+
+        j += 1
+
+
+    return table
+
+def tableGraph(analyzer):
+    graph = analyzer["graph"]
+    verteces = gr.vertices(graph)
+    ms.sort(verteces, cmpRutas)
+
+    table = ptbl()
+    table.field_names = ["Node_ID", "Code", "Bus_Stop", "Transport", "Longitude", "Latitude", "District_Name", "Neighborhood_Name", "Degree (Rep Routes)"]
+    listSize = lt.size(verteces)
+
+    i = 1
+    while i <= 5:
+
+        stop = lt.getElement(verteces, i)
+        row = []
+        row.append(stop)
+
+        if stop[0] == "T":
+            code = stop[2:]
+            busStop = "T-BUS"
+            transport = "Transfer bus"
+        else:
+            code = stop[0:5]
+            busStop = "BUS-" + stop[5:]
+            transport = "Day bus stop"
+
+        row.append(code)
+        row.append(busStop)
+        row.append(transport)
+
+        latitude, longitude = getValueFast(analyzer["id->Coordenadas HASH"], stop)
+        
+        row.append(longitude)
+        row.append(latitude)
+
+        disctrict = getValueFast(analyzer["id->District_Name HASH"], stop)
+        row.append(disctrict)   
+
+        neighbor = getValueFast(analyzer["id->Neighborhood_Name HASH"], stop) 
+        row.append(neighbor)
+
+        degree = gr.degree(graph, stop)//2
+        row.append(degree)
+
+        table.add_row(row)
+        table.hrules = True
+
+        i +=1
+
+    j = listSize - 4
+    while j <= listSize:
+
+        stop = lt.getElement(verteces, j)
+
+        row = []
+        row.append(stop)
+
+        if stop[0] == "T":
+            code = stop[2:]
+            busStop = "T-BUS"
+            transport = "Transfer bus"
+        else:
+            code = stop[0:5]
+            busStop = "BUS-" + stop[5:]
+            transport = "Day bus stop"
+
+        row.append(code)
+        row.append(busStop)
+        row.append(transport)
+        print(stop)
+
+        latitude, longitude = getValueFast(analyzer["id->Coordenadas HASH"], stop)
+        
+        row.append(longitude)
+        row.append(latitude)
+
+        disctrict = getValueFast(analyzer["id->District_Name HASH"], stop)
+        row.append(disctrict)   
+
+        neighbor = getValueFast(analyzer["id->Neighborhood_Name HASH"], stop) 
+        row.append(neighbor)
+
+        degree = gr.degree(graph, stop)//2
+        row.append(degree)
+
+        table.add_row(row)
+        table.hrules = True
+
+        j += 1
+
+
+    return table
+
 def cargaDeDatosVISUAL(list):
     table = ptbl()
     table.field_names = ["Identificador de la estación (Code-Ruta)", "Geolocalización (Latitud, Longitud)", "Número de estaciones de conexión"]
@@ -655,3 +876,38 @@ def cargaDeDatosVISUAL(list):
 
 
     return table
+
+def countExclusive(analyzer, exclusiveBusStopsRoutes):
+    graph = analyzer["graph"]
+    verteces = gr.vertices(graph)
+    edges = gr.edges(graph)
+
+    totalBusStops = lt.size(verteces)
+    
+
+    sharedBusStops = 0
+    sharedBusRoutes = 0
+
+
+
+    for vertex in lt.iterator(verteces):
+        if vertex[0] == "T":
+            sharedBusStops += 1
+            sharedBusRoutes += gr.degree(graph, vertex)
+
+
+    exclusiveBusStops = totalBusStops - sharedBusStops
+    totalBusStopsRoutes = exclusiveBusStopsRoutes + sharedBusRoutes
+
+    return totalBusStops, exclusiveBusStops, sharedBusStops, totalBusStopsRoutes, exclusiveBusStopsRoutes, sharedBusRoutes
+
+def graphSpecs(analyzer, graph):
+    graph = analyzer[graph]
+    nodes = gr.numVertices(graph)
+    if graph == "graph":
+        edges = gr.numEdges(graph)//2
+    else:
+        edges = gr.numEdges(graph)
+
+    return nodes, edges
+
