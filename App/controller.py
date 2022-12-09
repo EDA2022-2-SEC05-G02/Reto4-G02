@@ -173,11 +173,23 @@ def mostrarCarga(control):
 
 # Funciones de consulta sobre el catálogo
 
+#! =^..^=   =^..^=   =^..^=    =^..^=  [función auxiliar 0]  =^..^=    =^..^=    =^..^=    =^..^=
+def formateo(codigo):
+    if codigo[0]=="T":
+        return codigo
+    codigo = codigo.split("-")
+    partOne = str(codigo[0])
+    partTwo = str(codigo[1])
+    if len(partOne)!=4:
+        partOne = "0"*(4-len(partOne))+partOne
+    return (partOne+"-"+partTwo)
+
 #! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 1]  =^..^=    =^..^=    =^..^=    =^..^=
 
 def buscarCaminoPosibleEntreDosEstaciones(analyzer, graph, startStop, endStop):
+    startStop = formateo(startStop)
+    endStop = formateo(endStop)
     respuesta = model.buscarCaminoPosibleEntreDosEstaciones(analyzer[graph], startStop, endStop)
-
     return respuesta
 
         # NO SE HACE PORQUE SOLO SOMOS DOS
@@ -186,6 +198,8 @@ def buscarCaminoPosibleEntreDosEstaciones(analyzer, graph, startStop, endStop):
 
 def buscarCaminoOptimoEntreDosEstaciones(control, startStop, endStop):
     analyzer = control["model"]
+    startStop = formateo(startStop)
+    endStop = formateo(endStop)
     return model.buscarCaminoOptimoEntreDosEstaciones(analyzer, startStop, endStop)
 
 def distancias(control,pathList):
@@ -211,7 +225,7 @@ def requerimientoCuatro(control,localizacionOrigen,localizacionDestino):
 #! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 5]  =^..^=    =^..^=    =^..^=    =^..^=
 
 def reqCinco(control,estacionOrigen,numeroConexiones):
-
+    estacionOrigen = formateo(estacionOrigen)
     analyzer = control["model"]
     return model.reqCinco(analyzer,estacionOrigen,int(numeroConexiones))
 
@@ -219,11 +233,13 @@ def reqCinco(control,estacionOrigen,numeroConexiones):
 #! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 6]  =^..^=    =^..^=    =^..^=    =^..^=
 
 def requerimientoSix(control,estacionOrigen,neighborhoodDestino):
+    estacionOrigen = formateo(estacionOrigen)
     analyzer = control["model"]
     return model.requerimientoSix(analyzer,estacionOrigen,neighborhoodDestino)
 
 #! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 7]  =^..^=    =^..^=    =^..^=    =^..^=
 def findCirclePath(origin, control):
+    origin = formateo(origin)
     analyzer = control['model']
     return model.findCirclePath(origin, analyzer)
 

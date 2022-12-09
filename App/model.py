@@ -31,6 +31,7 @@ from DISClib.ADT import map as mp
 from DISClib.DataStructures import mapentry as me
 from DISClib.Algorithms.Sorting import shellsort as ss
 from tabulate import tabulate
+import controller
 import datetime 
 import time
 import copy
@@ -46,6 +47,7 @@ from folium.plugins import MarkerCluster
 import math
 assert cf
 from DISClib.Algorithms.Sorting import mergesort as ms
+import sys
 from prettytable import PrettyTable as ptbl
 from DISClib.Algorithms.Graphs import dfs
 from DISClib.Algorithms.Graphs import bfs
@@ -313,6 +315,7 @@ def printeadorReqCuatro(stackDado, analyzer=None):
     return textote,transbordo
 
 def printeoQuinto(analyzer,resp,estacionOrigen):
+    estacionOrigen = controller.formateo(estacionOrigen)
     imprimible = lt.newList("SINGLE_LINKED")
     graph = analyzer["DiGraph"]
     mapLatLog = analyzer["id->Coordenadas HASH"]
@@ -552,7 +555,11 @@ def findCirclePath(origin, analyzer):
         if size>2:
             if not(mp.contains(rbtStacksPerWeight,size)):
                 mp.put(rbtStacksPerWeight,size,stack)
-    caminosMinimos = om.minKey(rbtStacksPerWeight)
+    try:
+        caminosMinimos = om.minKey(rbtStacksPerWeight)
+    except:
+        print("Hey, ¡me temo que no hay caminos circulares para esta ubicación, intenta con otro vertice!")
+        sys.exit(0)
     llaveValor = om.get(rbtStacksPerWeight,caminosMinimos)
     stackMenor = me.getValue(llaveValor)
     return caminosMinimos, stackMenor
