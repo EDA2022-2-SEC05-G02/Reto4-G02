@@ -247,9 +247,14 @@ def thread_cycle():
             print(f"La cantidad de transbordos realizados fue de: {transbordo}")
 
         elif int(inputs) == 5:
-                # ESTOS NO LO HACEMOS PORQUE SOMOS SOLO 2
+            # estacionOrigen = "0036-109"
             estacionOrigen = input("¿Cúal es el identificador de la estación origen? (Code-IdBus): ")
             numeroConexiones = int(input("¿Cúal es el número de conexiones permitidas?: "))
+            resp, size = controller.reqCinco(control,estacionOrigen,numeroConexiones)
+            print(f"El número total de estaciones alcanzables es de: {size}")
+            tabla = model.printeoQuinto(control["model"],resp,estacionOrigen)
+            print(tabla)
+
 
         elif int(inputs) == 6:
             # DATOS TENTATIVOS QUE !!!DEBERÍAN!!! SERVIR

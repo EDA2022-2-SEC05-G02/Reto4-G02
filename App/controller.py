@@ -210,13 +210,17 @@ def requerimientoCuatro(control,localizacionOrigen,localizacionDestino):
 
 #! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 5]  =^..^=    =^..^=    =^..^=    =^..^=
 
-def requerimientoSix(control,estacionOrigen,neighborhoodDestino):
+def reqCinco(control,estacionOrigen,numeroConexiones):
+
     analyzer = control["model"]
-    return model.requerimientoSix(analyzer,estacionOrigen,neighborhoodDestino)
+    return model.reqCinco(analyzer,estacionOrigen,int(numeroConexiones))
 
 
 #! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 6]  =^..^=    =^..^=    =^..^=    =^..^=
 
+def requerimientoSix(control,estacionOrigen,neighborhoodDestino):
+    analyzer = control["model"]
+    return model.requerimientoSix(analyzer,estacionOrigen,neighborhoodDestino)
 
 #! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 7]  =^..^=    =^..^=    =^..^=    =^..^=
 def findCirclePath(origin, control):

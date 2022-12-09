@@ -33,6 +33,7 @@ from DISClib.Algorithms.Sorting import shellsort as ss
 from tabulate import tabulate
 import datetime 
 import time
+import copy
 from DISClib.ADT import list as lt
 from DISClib.ADT import map as mp
 from DISClib.ADT import orderedmap as om
@@ -122,9 +123,8 @@ def addCoordenadasToHASH(stop, analyzer):
     mp.put(map, id, (latitude, longitude))
 
     if stop["Transbordo"] == "S":
-
-        id = "T-"+ stop["Code"]
-        mp.put(map, id, (latitude, longitude))
+        newid = "T-"+ stop["Code"]
+        mp.put(map, newid, (latitude, longitude))
 
 def addDistrictToHASH(stop, analyzer):
     map = analyzer["id->District_Name HASH"]
@@ -134,7 +134,6 @@ def addDistrictToHASH(stop, analyzer):
     mp.put(map, id, district)
 
     if stop["Transbordo"] == "S":
-
         id = "T-"+ stop["Code"]
         mp.put(map, id, district)
 
@@ -312,6 +311,36 @@ def printeadorReqCuatro(stackDado, analyzer=None):
             textote += f", Has llegado al barrio: {barrio}"
         textote+="\n"
     return textote,transbordo
+
+def printeoQuinto(analyzer,resp,estacionOrigen):
+    imprimible = lt.newList("SINGLE_LINKED")
+    graph = analyzer["DiGraph"]
+    mapLatLog = analyzer["id->Coordenadas HASH"]
+    paths = dj.Dijkstra(graph,estacionOrigen)
+    for estacionDestino in lt.iterator(resp):
+        if dj.hasPathTo(paths, estacionDestino):
+            weightAllPath = str(dj.distTo(paths,estacionDestino))+"Km"
+            try:
+                tupla = getValueFast(mapLatLog,estacionDestino)
+                tuplaLina = f"latitud:{str(tupla[0])}, longitud:{str(tupla[1])}"
+            except:
+                tuplaLina = "Error 404 - latitude and longitude not found"
+            metible = [estacionDestino,tuplaLina,weightAllPath]
+            lt.addLast(imprimible,metible)
+    
+        #! hora de hacer la tablita >:)
+    table = ptbl()
+    table.field_names = ["Nombre de la Estación + Bus Code", "Latitud y Longitud","Camino más corto para llegar desde el origen (dijkstra)"]
+    for x in lt.iterator(imprimible):
+        print(x[0])
+        table.add_row(x)
+    table.hrules = True
+    return table
+
+
+
+
+
 #! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 1]  =^..^=    =^..^=    =^..^=    =^..^=
 
 def buscarCaminoPosibleEntreDosEstaciones(graph, startStop, endStop):
@@ -465,6 +494,26 @@ def estacionMasCercana (hashMap,location):
 
 #! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 5]  =^..^=    =^..^=    =^..^=    =^..^=
 
+def reqCinco(analyzer,estacionOrigen,count):
+    graph = analyzer["DiGraph"]
+    adyacentListOG = gr.adjacents(graph,estacionOrigen)
+    metida = lt.newList("SINGLE_LINKED")
+
+    #!  SÉ QUE ESTOY COMETIENDO UN CRIMEN DE GUERRA CON LO QUE ESTOY HACIENDO
+    #!  PERO JURO HABER INTENTADO TODO TIPO DE COPY, DEEPCOPY O  LIBRERIA EXTERNA
+    
+    i=0
+    while count>i:
+        for adyacente in lt.iterator(adyacentListOG):
+            adyacentListChange = gr.adjacents(graph,adyacente)
+            for metible in lt.iterator(adyacentListChange):
+                if not(lt.isPresent(adyacentListOG, metible)):
+                    lt.addLast(metida,metible)
+        for elemento in lt.iterator(metida):
+            if not(lt.isPresent(adyacentListOG,elemento)) and elemento!=estacionOrigen:
+                lt.addLast(adyacentListOG,elemento)
+        i+=1
+    return(adyacentListOG,lt.size(adyacentListOG))
 #! =^..^=   =^..^=   =^..^=    =^..^=  [Requerimiento 6]  =^..^=    =^..^=    =^..^=    =^..^=
 def requerimientoSix(analyzer,estacionOrigen,neighborhoodDestino):
     map = analyzer["hashPerNeighborhood"]
