@@ -42,6 +42,17 @@ jobs:
     - name: Eliminar carpeta clonada tree-sitter-python
       run: rm -rf tree-sitter-python/
 
+    - name: Commit de los cambios
+      run: |
+        git add .
+        git commit -m "Docs Genarados"
+    - name: GitHub Push
+      uses: ad-m/github-push-action@v0.6.0
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: main
+      
+
     - name: Clonar repositorio DocTemplate
       run: git clone https://github.com/diego4bits/docusaurus_test.git docs_template/
 
