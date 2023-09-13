@@ -1,0 +1,87 @@
+name: Run Python Script and Install Package
+
+on: 
+  workflow_dispatch:
+
+jobs:
+  clone_run_python:
+    runs-on: ubuntu-latest
+    
+    env:
+      OPENAI_API_KEY : ${{ secrets.OPENAI_API_KEY }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+    steps:
+    - name: Clonar repositorio actual
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 2
+      
+    - name: Configurar Python
+      uses: actions/setup-python@v4.7.0
+      with:
+        python-version: 3.9
+
+    - name: Clonar repositorio DocuMentor
+      run: git clone https://github.com/diego4bits/documentor_piedpiper.git documentor/
+
+    - name: Clonar repositorio tree-sitter-python
+      run: git clone https://github.com/diego4bits/tree-sitter-python.git tree-sitter-python/
+
+    - name: Instalar dependencias
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r ./documentor/requirements.txt
+        
+    - name: Ejecutar script de DocuMentor
+      run: python ./documentor/src/main.py
+      
+    - name: Eliminar carpeta clonada Documentor
+      run: rm -rf documentor/
+
+    - name: Eliminar carpeta clonada tree-sitter-python
+      run: rm -rf tree-sitter-python/
+
+    - name: Clonar repositorio DocTemplate
+      run: git clone https://github.com/diego4bits/docusaurus_test.git docs_template/
+
+    - name: Copiar carpeta de docs a docs_template
+      run: |
+        cp -r ./docs ./docs_template/docs
+    - name: Extraer y establecer el nombre del dueño y del repositorio en variables de entorno
+      run: |
+        echo "REPO_OWNER=$(echo ${{ github.repository }} | cut -d '/' -f 1)" >> $GITHUB_ENV
+        echo "REPO_NAME=$(echo ${{ github.repository }} | cut -d '/' -f 2)" >> $GITHUB_ENV
+        
+    - name: Set up Node.js
+      uses: actions/setup-node@v3.8.1
+      with:
+        node-version: '18'
+    
+    - name: Build Docusaurus
+      run: |
+        cd ./docs_template
+        npm install
+        npm run build
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./docs_template/build
+
+    - name: Eliminar carpeta clonada Documentor
+      run: rm -rf docs_template/
+
+    - name: Configurar Git
+      run: |
+        git config user.name "GitHub Actions"
+        git config user.email "actions@github.com"
+    - name: Commit de los cambios
+      run: |
+        git add .
+        git commit -m "Eliminar mi_carpeta"
+    - name: GitHub Push
+      uses: ad-m/github-push-action@v0.6.0
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: main
